@@ -37,7 +37,7 @@ class _DriverLoginState extends State<DriverLogin> {
               buildPassword(),
               const SizedBox(height: 40),
               buildLoginBtn(),
-              const SizedBox(height: 5),
+              const SizedBox(height: 0),
               const Image(
                 image: AssetImage('assets/images/login.png'),
                 height: 500,
