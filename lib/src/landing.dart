@@ -61,7 +61,7 @@ class _LandingWidgetState extends State<LandingWidget> {
                         clipBehavior: Clip.antiAliasWithSaveLayer,
                         child: InkWell(
                           splashColor: Colors.black,
-                          onTap: () => context.push('/driverLogin'),
+                          onTap: () => GoRouter.of(context).go('/driverLogin'),
                           child: Column(
                             children: [
                               Ink.image(
@@ -92,7 +92,7 @@ class _LandingWidgetState extends State<LandingWidget> {
                       clipBehavior: Clip.antiAliasWithSaveLayer,
                       child: InkWell(
                         splashColor: Colors.black,
-                        onTap: () => {},
+                        onTap: () => GoRouter.of(context).go('/mechanicLogin'),
                         child: Column(
                           children: [
                             Ink.image(

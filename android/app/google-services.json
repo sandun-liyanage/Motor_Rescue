@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "558880787978",
+    "project_id": "motorrescue-3b017",
+    "storage_bucket": "motorrescue-3b017.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558880787978:android:53202e4cfb74a7bff159f3",
+        "android_client_info": {
+          "package_name": "com.example.motor_rescue"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558880787978-71ojiopnpb8fepc9u9qao10h2iado7jf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOgTGaP1v2jBHjhOSHBxlZre1NUujWoo4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558880787978-71ojiopnpb8fepc9u9qao10h2iado7jf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
