@@ -18,9 +18,40 @@ class _DriverHomeState extends State<DriverHome> {
         toolbarHeight: 75,
         leadingWidth: 75,
       ),
-      body: const Text(
-        'sss',
-        style: TextStyle(fontSize: 56),
+      body: Material(
+        //elevation: 20,
+        //borderRadius: BorderRadius.all(Radius.circular(30)),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              image: DecorationImage(
+                  image: AssetImage('assets/images/mechanic.png')),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+
+                  blurRadius: 4,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Stack(
+              children: const [
+                Image(
+                  image: AssetImage('assets/images/mechanic.png'),
+                  height: 50,
+                ),
+                Text(
+                  'Having ussues with your vehicle?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 50),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
