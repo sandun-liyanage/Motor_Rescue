@@ -40,7 +40,7 @@ class _DriverHomeState extends State<DriverHome> {
               height: 400,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.blueGrey.withOpacity(0.7),
