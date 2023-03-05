@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class MechanicHome extends StatelessWidget {
   const MechanicHome({super.key});
@@ -15,6 +16,71 @@ class MechanicHome extends StatelessWidget {
         toolbarHeight: 75,
         leadingWidth: 75,
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: GNav(
+              backgroundColor: Colors.blue,
+              color: Colors.white,
+              activeColor: Colors.white,
+              tabBackgroundColor: Colors.blue.shade700,
+              padding: EdgeInsets.all(15),
+              gap: 5,
+              onTabChange: (index) {
+                //write navigate function
+              },
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Home',
+                  iconSize: 35,
+                  textStyle: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                GButton(
+                  icon: Icons.support_agent,
+                  text: 'Contact Us',
+                  iconSize: 35,
+                  textStyle: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                GButton(
+                  icon: Icons.person,
+                  text: 'Profile',
+                  iconSize: 35,
+                  textStyle: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                GButton(
+                  icon: Icons.logout,
+                  text: 'Logout',
+                  iconSize: 35,
+                  textStyle: TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20),
@@ -27,7 +93,11 @@ class MechanicHome extends StatelessWidget {
                   constraints: BoxConstraints(maxWidth: 300),
                   child: Text(
                     'Hello... Welcome back Sandun',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Gabriela-Regular',
+                    ),
                   ),
                 ),
               ),
@@ -62,7 +132,11 @@ class MechanicHome extends StatelessWidget {
           SizedBox(height: 25),
           Text(
             'New Job Request - 5KM away...',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Gabriela-Regular',
+            ),
           ),
           Container(
             height: 250,
@@ -100,11 +174,10 @@ class MechanicHome extends StatelessWidget {
                       Icon(Icons.chat, size: 60),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 100),
-                        child: Flexible(
-                            child: Text(
+                        child: Text(
                           'Chat With Driver',
                           textAlign: TextAlign.center,
-                        )),
+                        ),
                       ),
                     ],
                   ),
@@ -135,12 +208,10 @@ class MechanicHome extends StatelessWidget {
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 100),
-                        child: Flexible(
-                          child: Text(
-                            'Accept the Job',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.green),
-                          ),
+                        child: Text(
+                          'Accept the Job',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.green),
                         ),
                       ),
                     ],
@@ -172,12 +243,10 @@ class MechanicHome extends StatelessWidget {
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 100),
-                        child: Flexible(
-                          child: Text(
-                            'Decline the Job',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.red),
-                          ),
+                        child: Text(
+                          'Decline the Job',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.red),
                         ),
                       ),
                     ],
@@ -213,7 +282,11 @@ class MechanicHome extends StatelessWidget {
           ),
           Text(
             'Current Job',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Gabriela-Regular',
+            ),
           ),
           Container(
             height: 250,
@@ -251,11 +324,10 @@ class MechanicHome extends StatelessWidget {
                       Icon(Icons.chat, size: 60),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 100),
-                        child: Flexible(
-                            child: Text(
+                        child: Text(
                           'Chat With Driver',
                           textAlign: TextAlign.center,
-                        )),
+                        ),
                       ),
                     ],
                   ),
@@ -286,12 +358,10 @@ class MechanicHome extends StatelessWidget {
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 100),
-                        child: Flexible(
-                          child: Text(
-                            'Driver Location',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.blue),
-                          ),
+                        child: Text(
+                          'Driver Location',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.blue),
                         ),
                       ),
                     ],
@@ -323,12 +393,10 @@ class MechanicHome extends StatelessWidget {
                       ),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 100),
-                        child: Flexible(
-                          child: Text(
-                            'Complete the Job',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.green),
-                          ),
+                        child: Text(
+                          'Complete the Job',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.green),
                         ),
                       ),
                     ],

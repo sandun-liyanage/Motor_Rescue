@@ -45,6 +45,7 @@ class _DriverLoginState extends State<DriverLogin> {
                 style: TextStyle(
                   fontSize: 55,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Gabriela-Regular',
                 ),
               ),
               const SizedBox(height: 80),

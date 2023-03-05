@@ -37,6 +37,7 @@ class _MechanicLoginState extends State<MechanicLogin> {
                 style: TextStyle(
                   fontSize: 55,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Gabriela-Regular',
                 ),
               ),
               const SizedBox(height: 80),
