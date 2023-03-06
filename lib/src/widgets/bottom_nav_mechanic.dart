@@ -1,0 +1,95 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+
+class BottomNavMechanicWidget extends StatelessWidget {
+  const BottomNavMechanicWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(40),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: GNav(
+            backgroundColor: Colors.blue,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.blue.shade700,
+            padding: EdgeInsets.all(15),
+            gap: 5,
+            onTabChange: (index) {
+              switch (index) {
+                case 0:
+                  GoRouter.of(context).go('/mechanicHome');
+                  break;
+                case 1:
+                  GoRouter.of(context).go('/mechanicHome');
+                  break;
+                case 2:
+                  GoRouter.of(context).go('/mechanicHome');
+                  break;
+                case 3:
+                  //logout function
+                  break;
+                default:
+                  GoRouter.of(context).go('/mechanicHome');
+              }
+            },
+            tabs: [
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+                iconSize: 35,
+                textStyle: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              GButton(
+                icon: Icons.support_agent,
+                text: 'Contact Us',
+                iconSize: 35,
+                textStyle: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              GButton(
+                icon: Icons.person,
+                text: 'Profile',
+                iconSize: 35,
+                textStyle: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              GButton(
+                icon: Icons.logout,
+                text: 'Logout',
+                iconSize: 35,
+                textStyle: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

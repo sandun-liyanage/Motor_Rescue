@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+import '../widgets/bottom_nav_mechanic.dart';
 
 class MechanicHome extends StatelessWidget {
   const MechanicHome({super.key});
@@ -9,84 +9,14 @@ class MechanicHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Color(0xff24688e)),
-        toolbarHeight: 75,
-        leadingWidth: 75,
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.circular(40),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: GNav(
-              backgroundColor: Colors.blue,
-              color: Colors.white,
-              activeColor: Colors.white,
-              tabBackgroundColor: Colors.blue.shade700,
-              padding: EdgeInsets.all(15),
-              gap: 5,
-              onTabChange: (index) {
-                //write navigate function
-              },
-              tabs: [
-                GButton(
-                  icon: Icons.home,
-                  text: 'Home',
-                  iconSize: 35,
-                  textStyle: TextStyle(
-                    fontSize: 25,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                GButton(
-                  icon: Icons.support_agent,
-                  text: 'Contact Us',
-                  iconSize: 35,
-                  textStyle: TextStyle(
-                    fontSize: 25,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                GButton(
-                  icon: Icons.person,
-                  text: 'Profile',
-                  iconSize: 35,
-                  textStyle: TextStyle(
-                    fontSize: 25,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                GButton(
-                  icon: Icons.logout,
-                  text: 'Logout',
-                  iconSize: 35,
-                  textStyle: TextStyle(
-                    fontSize: 25,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar: BottomNavMechanicWidget(),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ConstrainedBox(
