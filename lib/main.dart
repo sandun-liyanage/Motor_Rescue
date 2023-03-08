@@ -6,6 +6,7 @@ import 'package:motor_rescue/src/auth/driver_signup.dart';
 import 'package:motor_rescue/src/auth/mechanic_login.dart';
 import 'package:motor_rescue/src/auth/mechanic_signup.dart';
 import 'package:motor_rescue/src/driver_dashboard/driver_home.dart';
+import 'package:motor_rescue/src/driver_dashboard/nearest_mechanics.dart';
 import 'package:motor_rescue/src/landing.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/directions.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/mechanic_home.dart';
@@ -41,6 +42,12 @@ final router = GoRouter(
         GoRoute(
           path: 'driver',
           builder: (context, state) => const DriverHome(),
+          routes: [
+            GoRoute(
+              path: 'nearestMechanics',
+              builder: (context, state) => const NearestMechanics(),
+            ),
+          ],
         ),
         GoRoute(
           path: 'mechanic',

@@ -24,7 +24,9 @@ class _DirectionsState extends State<Directions> {
   LocationData? currentLocation;
   LocationData? sourceLocation;
 
-  void getCurrentLocation() {
+  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+
+  void getCurrentLocation() async {
     Location location = Location();
 
     location.getLocation().then((location) {
@@ -34,15 +36,26 @@ class _DirectionsState extends State<Directions> {
       getPolyPoints();
     });
 
+    //GoogleMapController googleMapController = await _controller.future;
+
     location.onLocationChanged.listen(
       (newLocation) {
         currentLocation = newLocation;
 
-        //setState(() {});
+        /*googleMapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              zoom: 15,
+              target: LatLng(
+                newLocation.latitude!,
+                newLocation.longitude!,
+              ),
+            ),
+          ),
+        );*/
+
         if (mounted) {
-          setState(() {
-            // Your state change code goes here
-          });
+          setState(() {});
         }
       },
     );
@@ -67,10 +80,20 @@ class _DirectionsState extends State<Directions> {
     }
   }
 
+  void setCustomMarkerIcon() async {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/images/mechanicIcon.jpg")
+        .then(
+      (icon) {
+        currentLocationIcon = icon;
+      },
+    );
+  }
+
   @override
   void initState() {
     getCurrentLocation();
-
+    setCustomMarkerIcon();
     super.initState();
   }
 
@@ -92,7 +115,7 @@ class _DirectionsState extends State<Directions> {
               initialCameraPosition: CameraPosition(
                 target: LatLng(
                     currentLocation!.latitude!, currentLocation!.longitude!),
-                zoom: 13,
+                zoom: 15,
               ),
               polylines: {
                 Polyline(
@@ -105,6 +128,7 @@ class _DirectionsState extends State<Directions> {
               markers: {
                 Marker(
                   markerId: MarkerId('currentLocation'),
+                  icon: currentLocationIcon,
                   position: LatLng(
                       currentLocation!.latitude!, currentLocation!.longitude!),
                 ),
@@ -117,6 +141,9 @@ class _DirectionsState extends State<Directions> {
                   markerId: MarkerId('destination'),
                   position: destination,
                 ),
+              },
+              onMapCreated: (mapController) {
+                _controller.complete(mapController);
               },
             ),
     );

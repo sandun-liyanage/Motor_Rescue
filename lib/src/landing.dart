@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,33 +18,71 @@ class _LandingWidgetState extends State<LandingWidget> {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/bgimg.jpg"),
-            fit: BoxFit.cover,
-          ),
-        ),
+        decoration: BoxDecoration(
+            // image: DecorationImage(
+            //   image: AssetImage("assets/images/bgimg.jpg"),
+            //   fit: BoxFit.cover,
+            // ),
+            // gradient: LinearGradient(
+            //   begin: Alignment.topCenter,
+            //   end: Alignment.topCenter,
+            //   colors: const [
+            //     Colors.blue,
+            //     Colors.white,
+            //   ],
+            // ),
+            ),
         child: Padding(
           padding: EdgeInsets.all(1),
           child: Column(
             children: <Widget>[
-              const SizedBox(height: 70),
-              Image(
-                image: AssetImage("assets/images/landing.png"),
-                fit: BoxFit.cover,
-                height: size.height * 0.25,
-              ),
+              SizedBox(height: size.height * 0.025),
               const Text(
                 "\nMotor Rescue",
                 style: TextStyle(
-                  fontSize: 40,
+                  fontSize: 45,
                   fontWeight: FontWeight.bold,
+                  fontFamily: "Gabriela-Regular",
                 ),
               ),
               const Text(
-                "\nExpert Hands, Expert Solutions\n\n",
+                "Expert Hands, Expert Solutions\n\n",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18,
+                  fontFamily: "Gabriela-Regular",
+                ),
+              ),
+              Image(
+                image: AssetImage("assets/images/icon.png"),
+                fit: BoxFit.cover,
+                height: size.height * 0.4,
+              ),
+              SizedBox(height: size.height * 0.02),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 1,
+                        height: 50,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      "     Continue as     ",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 1,
+                        height: 25,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Row(

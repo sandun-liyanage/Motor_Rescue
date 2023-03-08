@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -11,8 +11,9 @@ class BottomNavDriverWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(8),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.blue,
@@ -25,33 +26,33 @@ class BottomNavDriverWidget extends StatelessWidget {
             color: Colors.white,
             activeColor: Colors.white,
             tabBackgroundColor: Colors.blue.shade700,
-            padding: EdgeInsets.all(15),
+            padding: EdgeInsets.all(10),
             gap: 5,
             onTabChange: (index) {
               switch (index) {
                 case 0:
-                  GoRouter.of(context).go('/mechanicHome');
+                  GoRouter.of(context).go('/mechanic');
                   break;
                 case 1:
-                  GoRouter.of(context).go('/mechanicHome');
+                  GoRouter.of(context).go('/mechanic');
                   break;
                 case 2:
-                  GoRouter.of(context).go('/mechanicHome');
+                  GoRouter.of(context).go('/mechanic');
                   break;
                 case 3:
                   //logout function
                   break;
                 default:
-                  GoRouter.of(context).go('/mechanicHome');
+                  GoRouter.of(context).go('/mechanic');
               }
             },
             tabs: [
               GButton(
                 icon: Icons.home,
                 text: 'Home',
-                iconSize: 35,
+                iconSize: 30,
                 textStyle: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -59,9 +60,9 @@ class BottomNavDriverWidget extends StatelessWidget {
               GButton(
                 icon: Icons.support_agent,
                 text: 'Contact Us',
-                iconSize: 35,
+                iconSize: 30,
                 textStyle: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -69,9 +70,9 @@ class BottomNavDriverWidget extends StatelessWidget {
               GButton(
                 icon: Icons.person,
                 text: 'Profile',
-                iconSize: 35,
+                iconSize: 30,
                 textStyle: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -79,9 +80,9 @@ class BottomNavDriverWidget extends StatelessWidget {
               GButton(
                 icon: Icons.logout,
                 text: 'Logout',
-                iconSize: 35,
+                iconSize: 30,
                 textStyle: TextStyle(
-                  fontSize: 25,
+                  fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
