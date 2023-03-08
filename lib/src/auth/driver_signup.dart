@@ -24,6 +24,7 @@ final _formKey = GlobalKey<FormState>();
 class _DriverSignupState extends State<DriverSignup> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -33,20 +34,18 @@ class _DriverSignupState extends State<DriverSignup> {
         leadingWidth: 75,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(20),
         child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 10),
             const Text(
               'Signup',
               style: TextStyle(
-                fontSize: 55,
+                fontSize: 45,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Gabriela-Regular',
               ),
             ),
-            const SizedBox(height: 80, width: double.infinity),
+            SizedBox(height: size.height * 0.05),
             Form(
               key: _formKey,
               child: Column(
@@ -54,30 +53,30 @@ class _DriverSignupState extends State<DriverSignup> {
                   Row(
                     children: [
                       Flexible(child: buildFirstName()),
-                      const SizedBox(width: 20),
+                      SizedBox(width: size.width * 0.03),
                       Flexible(child: buildLastName()),
                     ],
                   ),
-                  const SizedBox(height: 40),
+                  SizedBox(height: size.height * 0.03),
                   buildEmail(),
-                  const SizedBox(height: 40),
+                  SizedBox(height: size.height * 0.03),
                   buildPassword(),
-                  const SizedBox(height: 40),
+                  SizedBox(height: size.height * 0.03),
                   buildAddress(),
-                  const SizedBox(height: 40),
+                  SizedBox(height: size.height * 0.03),
                   buildPhone(),
-                  const SizedBox(height: 40),
+                  SizedBox(height: size.height * 0.03),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     width: double.infinity,
-                    height: 80,
+                    height: 75,
                     child: ElevatedButton(
                       onPressed: () => _signUp(context),
                       child: const Text(
                         'SIGNUP',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -91,14 +90,14 @@ class _DriverSignupState extends State<DriverSignup> {
               children: [
                 const Text(
                   "Already have an account? ",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 15),
                 ),
                 GestureDetector(
                   onTap: () => GoRouter.of(context).go('/driverLogin'),
                   child: const Text(
                     'Login',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: Colors.blue,
                     ),
@@ -119,7 +118,7 @@ Widget buildFirstName() {
   return Column(
     children: [
       Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -131,19 +130,19 @@ Widget buildFirstName() {
             ),
           ],
         ),
-        height: 70,
+        height: 60,
         child: TextField(
           controller: fnameController,
           style: const TextStyle(
             color: Colors.black87,
-            fontSize: 25,
+            fontSize: 20,
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
             icon: Icon(
               Icons.person,
               color: Color(0xff5ac18e),
-              size: 35,
+              size: 30,
             ),
             hintText: 'First Name',
           ),
@@ -159,7 +158,6 @@ Widget buildLastName() {
   return Column(
     children: [
       Container(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -171,19 +169,19 @@ Widget buildLastName() {
             ),
           ],
         ),
-        height: 70,
+        height: 60,
         child: TextField(
           controller: lnameController,
           style: const TextStyle(
             color: Colors.black87,
-            fontSize: 25,
+            fontSize: 20,
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
             icon: Icon(
               null,
               color: Color(0xff5ac18e),
-              size: 35,
+              size: 30,
             ),
             hintText: 'Last Name',
           ),
@@ -199,7 +197,7 @@ Widget buildEmail() {
   return Column(
     children: [
       Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -211,20 +209,20 @@ Widget buildEmail() {
             ),
           ],
         ),
-        height: 70,
+        height: 60,
         child: TextField(
           keyboardType: TextInputType.emailAddress,
           controller: emailController,
           style: const TextStyle(
             color: Colors.black87,
-            fontSize: 25,
+            fontSize: 20,
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
             icon: Icon(
               Icons.email,
               color: Color(0xff5ac18e),
-              size: 35,
+              size: 30,
             ),
             hintText: 'Email',
           ),
@@ -241,7 +239,7 @@ Widget buildPassword() {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -253,20 +251,20 @@ Widget buildPassword() {
             ),
           ],
         ),
-        height: 70,
+        height: 60,
         child: TextField(
           obscureText: true,
           controller: passwordController,
           style: const TextStyle(
             color: Colors.black87,
-            fontSize: 25,
+            fontSize: 20,
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
             icon: Icon(
               Icons.lock,
               color: Color(0xff5ac18e),
-              size: 35,
+              size: 30,
             ),
             hintText: 'Password',
           ),
@@ -282,7 +280,7 @@ Widget buildAddress() {
   return Column(
     children: [
       Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -294,19 +292,19 @@ Widget buildAddress() {
             ),
           ],
         ),
-        height: 70,
+        height: 60,
         child: TextField(
           controller: addressController,
           style: const TextStyle(
             color: Colors.black87,
-            fontSize: 25,
+            fontSize: 20,
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
             icon: Icon(
               Icons.house,
               color: Color(0xff5ac18e),
-              size: 35,
+              size: 30,
             ),
             hintText: 'Home Address',
           ),
@@ -322,7 +320,7 @@ Widget buildPhone() {
   return Column(
     children: [
       Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -334,20 +332,20 @@ Widget buildPhone() {
             ),
           ],
         ),
-        height: 70,
+        height: 60,
         child: TextField(
           keyboardType: TextInputType.phone,
           controller: phoneController,
           style: const TextStyle(
             color: Colors.black87,
-            fontSize: 25,
+            fontSize: 20,
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
             icon: Icon(
               Icons.phone,
               color: Color(0xff5ac18e),
-              size: 35,
+              size: 30,
             ),
             hintText: 'Phone',
           ),

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously
+// ignore_for_file: avoid_print, use_build_context_synchronously, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +18,7 @@ final passwordController = TextEditingController();
 class _MechanicLoginState extends State<MechanicLogin> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -31,31 +32,30 @@ class _MechanicLoginState extends State<MechanicLogin> {
           padding: const EdgeInsets.all(30),
           child: Column(
             children: [
-              const SizedBox(height: 10),
               const Text(
                 'Login',
                 style: TextStyle(
-                  fontSize: 55,
+                  fontSize: 45,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Gabriela-Regular',
                 ),
               ),
-              const SizedBox(height: 80),
+              SizedBox(height: size.height * 0.05),
               buildEmail(),
-              const SizedBox(height: 40),
+              SizedBox(height: size.height * 0.03),
               buildPassword(),
-              const SizedBox(height: 40),
+              SizedBox(height: size.height * 0.03),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 width: double.infinity,
-                height: 80,
+                height: 75,
                 child: ElevatedButton(
                   onPressed: () => _logInMechanic(context),
                   child: const Text(
                     'LOGIN',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -66,14 +66,14 @@ class _MechanicLoginState extends State<MechanicLogin> {
                 children: [
                   const Text(
                     "Don't have an account? ",
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 15),
                   ),
                   GestureDetector(
                     onTap: () => GoRouter.of(context).go('/mechanicSignup'),
                     child: const Text(
                       'Signup',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
                       ),
@@ -81,10 +81,9 @@ class _MechanicLoginState extends State<MechanicLogin> {
                   ),
                 ],
               ),
-              const SizedBox(height: 0),
-              const Image(
+              Image(
                 image: AssetImage('assets/images/mechanic.png'),
-                height: 500,
+                height: size.height * 0.4,
                 fit: BoxFit.cover,
               )
             ],
@@ -100,7 +99,7 @@ Widget buildEmail() {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -112,20 +111,20 @@ Widget buildEmail() {
             ),
           ],
         ),
-        height: 70,
+        height: 60,
         child: TextField(
           keyboardType: TextInputType.emailAddress,
           controller: emailController,
           style: const TextStyle(
             color: Colors.black87,
-            fontSize: 25,
+            fontSize: 20,
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
             icon: Icon(
               Icons.email,
               color: Color(0xff5ac18e),
-              size: 35,
+              size: 30,
             ),
             hintText: 'Email',
           ),
@@ -140,7 +139,7 @@ Widget buildPassword() {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Container(
-        padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -152,20 +151,20 @@ Widget buildPassword() {
             ),
           ],
         ),
-        height: 70,
+        height: 60,
         child: TextField(
           obscureText: true,
           controller: passwordController,
           style: const TextStyle(
             color: Colors.black87,
-            fontSize: 25,
+            fontSize: 20,
           ),
           decoration: const InputDecoration(
             border: InputBorder.none,
             icon: Icon(
               Icons.lock,
               color: Color(0xff5ac18e),
-              size: 35,
+              size: 30,
             ),
             hintText: 'Password',
           ),
@@ -189,7 +188,7 @@ void _logInMechanic(BuildContext context) async {
   );
   if (result == 'success') {
     print(result);
-    GoRouter.of(context).go('/mechanicHome');
+    GoRouter.of(context).go('/mechanic');
   } else {
     print(result);
     //showSnackBar(result, context);

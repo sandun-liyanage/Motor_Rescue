@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,10 +13,8 @@ class LandingWidget extends StatefulWidget {
 class _LandingWidgetState extends State<LandingWidget> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
-      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -25,14 +25,14 @@ class _LandingWidgetState extends State<LandingWidget> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(1),
           child: Column(
             children: <Widget>[
               const SizedBox(height: 70),
-              const Image(
+              Image(
                 image: AssetImage("assets/images/landing.png"),
                 fit: BoxFit.cover,
-                height: 350,
+                height: size.height * 0.25,
               ),
               const Text(
                 "\nMotor Rescue",
@@ -47,45 +47,45 @@ class _LandingWidgetState extends State<LandingWidget> {
                   fontSize: 20,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 70, 0),
-                      child: Material(
-                        color: Colors.blue,
-                        elevation: 20,
-                        borderRadius: BorderRadius.circular(30),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: InkWell(
-                          splashColor: Colors.black,
-                          onTap: () => GoRouter.of(context).go('/driverLogin'),
-                          child: Column(
-                            children: [
-                              Ink.image(
-                                image: const AssetImage(
-                                    'assets/images/driverIcon.jpg'),
-                                height: 150,
-                                width: 150,
-                                fit: BoxFit.cover,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(size.width * 0.05),
+                    child: Material(
+                      color: Colors.blue,
+                      elevation: 20,
+                      borderRadius: BorderRadius.circular(30),
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: InkWell(
+                        splashColor: Colors.black,
+                        onTap: () => GoRouter.of(context).go('/driverLogin'),
+                        child: Column(
+                          children: [
+                            Ink.image(
+                              image: const AssetImage(
+                                  'assets/images/driverIcon.jpg'),
+                              height: size.height * 0.12,
+                              width: size.width * 0.35,
+                              fit: BoxFit.cover,
+                            ),
+                            const SizedBox(height: 5),
+                            const Text(
+                              'Driver',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
                               ),
-                              const SizedBox(height: 5),
-                              const Text(
-                                'Driver',
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 5),
+                          ],
                         ),
                       ),
                     ),
-                    Material(
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(size.width * 0.05),
+                    child: Material(
                       color: Colors.blue,
                       elevation: 20,
                       borderRadius: BorderRadius.circular(30),
@@ -98,15 +98,15 @@ class _LandingWidgetState extends State<LandingWidget> {
                             Ink.image(
                               image: const AssetImage(
                                   'assets/images/mechanicIcon.jpg'),
-                              height: 150,
-                              width: 150,
+                              height: size.height * 0.12,
+                              width: size.width * 0.35,
                               fit: BoxFit.cover,
                             ),
                             const SizedBox(height: 5),
                             const Text(
                               'Mechanic',
                               style: TextStyle(
-                                fontSize: 25,
+                                fontSize: 20,
                                 color: Colors.white,
                               ),
                             ),
@@ -115,8 +115,8 @@ class _LandingWidgetState extends State<LandingWidget> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

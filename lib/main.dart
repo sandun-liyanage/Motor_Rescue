@@ -7,6 +7,7 @@ import 'package:motor_rescue/src/auth/mechanic_login.dart';
 import 'package:motor_rescue/src/auth/mechanic_signup.dart';
 import 'package:motor_rescue/src/driver_dashboard/driver_home.dart';
 import 'package:motor_rescue/src/landing.dart';
+import 'package:motor_rescue/src/mechanic_dashboard/directions.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/mechanic_home.dart';
 
 Future<void> main() async {
@@ -38,12 +39,18 @@ final router = GoRouter(
           builder: (context, state) => const MechanicSignup(),
         ),
         GoRoute(
-          path: 'driverHome',
+          path: 'driver',
           builder: (context, state) => const DriverHome(),
         ),
         GoRoute(
-          path: 'mechanicHome',
+          path: 'mechanic',
           builder: (context, state) => const MechanicHome(),
+          routes: [
+            GoRoute(
+              path: 'directions',
+              builder: (context, state) => const Directions(),
+            ),
+          ],
         )
       ],
     ),

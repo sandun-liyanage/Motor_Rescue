@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/bottom_nav_mechanic.dart';
 
 class MechanicHome extends StatelessWidget {
@@ -8,6 +9,7 @@ class MechanicHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       bottomNavigationBar: BottomNavMechanicWidget(),
       body: SingleChildScrollView(
@@ -20,21 +22,21 @@ class MechanicHome extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 300),
+                  constraints: BoxConstraints(maxWidth: size.width * 0.5),
                   child: Text(
                     'Hello... Welcome back Sandun',
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 25,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Gabriela-Regular',
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              jobRequestWidget(),
-              SizedBox(height: 20),
-              //currentJobWidget(),
+              SizedBox(height: size.height * 0.01),
+              //jobRequestWidget(context),
+              SizedBox(height: size.height * 0.01),
+              currentJobWidget(context),
             ],
           ),
         ),
@@ -44,9 +46,10 @@ class MechanicHome extends StatelessWidget {
 
 //---------------------------------------------------------------------------
 
-  Widget jobRequestWidget() {
+  Widget jobRequestWidget(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
-      height: 500,
+      height: size.height * 0.425,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -59,29 +62,30 @@ class MechanicHome extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SizedBox(height: 25),
+          SizedBox(height: size.height * 0.02),
           Text(
             'New Job Request - 5KM away...',
             style: TextStyle(
-              fontSize: 25,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               fontFamily: 'Gabriela-Regular',
             ),
           ),
           Container(
-            height: 250,
-            width: 500,
+            height: size.height * 0.2,
+            width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: const DecorationImage(
-                  image: AssetImage('assets/images/jobRequest.jpg'),
-                  fit: BoxFit.cover),
+                image: AssetImage('assets/images/jobRequest.jpg'),
+                fit: BoxFit.cover,
+              ),
             ),
             //child: Image(image: AssetImage('assets/images/vBreakdown.png')),
           ),
-          SizedBox(height: 30),
+          SizedBox(height: size.height * 0.03),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -89,10 +93,10 @@ class MechanicHome extends StatelessWidget {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
+                      horizontal: size.width * 0.01,
+                      vertical: size.height * 0.01,
                     ),
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.blue,
@@ -101,7 +105,7 @@ class MechanicHome extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Icon(Icons.chat, size: 60),
+                      Icon(Icons.chat, size: 40),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 100),
                         child: Text(
@@ -112,17 +116,15 @@ class MechanicHome extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 15),
+                SizedBox(width: size.width * 0.025),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    textStyle: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    textStyle:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
+                      horizontal: size.width * 0.01,
+                      vertical: size.height * 0.01,
                     ),
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.blue,
@@ -133,7 +135,7 @@ class MechanicHome extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.done,
-                        size: 60,
+                        size: 40,
                         color: Colors.green,
                       ),
                       ConstrainedBox(
@@ -147,17 +149,17 @@ class MechanicHome extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 15),
+                SizedBox(width: size.width * 0.025),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     textStyle: TextStyle(
-                      fontSize: 20,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
+                      horizontal: size.width * 0.01,
+                      vertical: size.height * 0.01,
                     ),
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.blue,
@@ -168,7 +170,7 @@ class MechanicHome extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.close,
-                        size: 60,
+                        size: 40,
                         color: Colors.red,
                       ),
                       ConstrainedBox(
@@ -192,9 +194,10 @@ class MechanicHome extends StatelessWidget {
 
   //---------------------------------------------------------------------------------
 
-  Widget currentJobWidget() {
+  Widget currentJobWidget(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
-      height: 500,
+      height: size.height * 0.425,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -207,20 +210,18 @@ class MechanicHome extends StatelessWidget {
       ),
       child: Column(
         children: [
-          SizedBox(
-            height: 25,
-          ),
+          SizedBox(height: size.height * 0.02),
           Text(
             'Current Job',
             style: TextStyle(
-              fontSize: 25,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               fontFamily: 'Gabriela-Regular',
             ),
           ),
           Container(
-            height: 250,
-            width: 500,
+            height: size.height * 0.2,
+            width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               image: const DecorationImage(
@@ -229,9 +230,9 @@ class MechanicHome extends StatelessWidget {
             ),
             //child: Image(image: AssetImage('assets/images/vBreakdown.png')),
           ),
-          SizedBox(height: 30),
+          SizedBox(height: size.height * 0.03),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -239,10 +240,10 @@ class MechanicHome extends StatelessWidget {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
+                      horizontal: size.width * 0.01,
+                      vertical: size.height * 0.01,
                     ),
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.blue,
@@ -251,7 +252,7 @@ class MechanicHome extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      Icon(Icons.chat, size: 60),
+                      Icon(Icons.chat, size: 40),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 100),
                         child: Text(
@@ -262,17 +263,17 @@ class MechanicHome extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 15),
+                SizedBox(width: size.width * 0.025),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    GoRouter.of(context).go('/mechanic/directions');
+                  },
                   style: ElevatedButton.styleFrom(
-                    textStyle: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    textStyle:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
+                      horizontal: size.width * 0.01,
+                      vertical: size.height * 0.01,
                     ),
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.blue,
@@ -283,7 +284,7 @@ class MechanicHome extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.navigation,
-                        size: 60,
+                        size: 40,
                         color: Colors.blue,
                       ),
                       ConstrainedBox(
@@ -297,17 +298,15 @@ class MechanicHome extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(width: 15),
+                SizedBox(width: size.width * 0.025),
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                    textStyle: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    textStyle:
+                        TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 15,
+                      horizontal: size.width * 0.01,
+                      vertical: size.height * 0.01,
                     ),
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.blue,
@@ -318,7 +317,7 @@ class MechanicHome extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.check,
-                        size: 60,
+                        size: 40,
                         color: Colors.red,
                       ),
                       ConstrainedBox(

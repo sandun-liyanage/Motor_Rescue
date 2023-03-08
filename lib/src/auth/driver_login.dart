@@ -26,6 +26,7 @@ class _DriverLoginState extends State<DriverLogin> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -36,34 +37,33 @@ class _DriverLoginState extends State<DriverLogin> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const SizedBox(height: 10),
               const Text(
                 'Login',
                 style: TextStyle(
-                  fontSize: 55,
+                  fontSize: 45,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Gabriela-Regular',
                 ),
               ),
-              const SizedBox(height: 80),
+              SizedBox(height: size.height * 0.05),
               buildEmail(),
-              const SizedBox(height: 40),
+              SizedBox(height: size.height * 0.03),
               buildPassword(),
-              const SizedBox(height: 40),
+              SizedBox(height: size.height * 0.04),
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 width: double.infinity,
-                height: 80,
+                height: 75,
                 child: ElevatedButton(
                   onPressed: () => _logInDriver(context),
                   child: const Text(
                     'LOGIN',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -74,14 +74,14 @@ class _DriverLoginState extends State<DriverLogin> {
                 children: [
                   const Text(
                     "Don't have an account? ",
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 15),
                   ),
                   GestureDetector(
                     onTap: () => GoRouter.of(context).go('/driverSignup'),
                     child: const Text(
                       'Signup',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
                       ),
@@ -89,10 +89,9 @@ class _DriverLoginState extends State<DriverLogin> {
                   ),
                 ],
               ),
-              const SizedBox(height: 0),
-              const Image(
-                image: AssetImage('assets/images/login.png'),
-                height: 500,
+              Image(
+                image: const AssetImage('assets/images/login.png'),
+                height: size.height * 0.4,
                 fit: BoxFit.cover,
               )
             ],
@@ -107,7 +106,7 @@ class _DriverLoginState extends State<DriverLogin> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -119,20 +118,20 @@ class _DriverLoginState extends State<DriverLogin> {
               ),
             ],
           ),
-          height: 70,
+          height: 60,
           child: TextField(
             keyboardType: TextInputType.emailAddress,
             controller: emailController,
             style: const TextStyle(
               color: Colors.black87,
-              fontSize: 25,
+              fontSize: 20,
             ),
             decoration: const InputDecoration(
               border: InputBorder.none,
               icon: Icon(
                 Icons.email,
                 color: Color(0xff5ac18e),
-                size: 35,
+                size: 30,
               ),
               hintText: 'Email',
             ),
@@ -147,7 +146,7 @@ class _DriverLoginState extends State<DriverLogin> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -159,20 +158,20 @@ class _DriverLoginState extends State<DriverLogin> {
               ),
             ],
           ),
-          height: 70,
+          height: 60,
           child: TextField(
             obscureText: true,
             controller: passwordController,
             style: const TextStyle(
               color: Colors.black87,
-              fontSize: 25,
+              fontSize: 20,
             ),
             decoration: const InputDecoration(
               border: InputBorder.none,
               icon: Icon(
                 Icons.lock,
                 color: Color(0xff5ac18e),
-                size: 35,
+                size: 30,
               ),
               hintText: 'Password',
             ),
@@ -196,7 +195,7 @@ class _DriverLoginState extends State<DriverLogin> {
     );
     if (result == 'success') {
       print(result);
-      GoRouter.of(context).go('/driverHome');
+      GoRouter.of(context).go('/driver');
     } else {
       print(result);
       //showSnackBar(result, context);
