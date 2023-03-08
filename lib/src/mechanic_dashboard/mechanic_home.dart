@@ -11,6 +11,13 @@ class MechanicHome extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Color(0xff24688e)),
+        toolbarHeight: 75,
+        leadingWidth: 75,
+      ),
       bottomNavigationBar: BottomNavMechanicWidget(),
       body: SingleChildScrollView(
         child: Padding(
@@ -34,7 +41,7 @@ class MechanicHome extends StatelessWidget {
                 ),
               ),
               SizedBox(height: size.height * 0.01),
-              //jobRequestWidget(context),
+              jobRequestWidget(context),
               SizedBox(height: size.height * 0.01),
               currentJobWidget(context),
             ],
