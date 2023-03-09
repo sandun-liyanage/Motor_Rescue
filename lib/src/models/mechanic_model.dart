@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: body_might_complete_normally_nullable
 
 class MechanicModel {
   final String fname;
@@ -25,15 +25,24 @@ class MechanicModel {
         "phone": phone,
       };
 
-  static MechanicModel? fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
-    return MechanicModel(
-      fname: snapshot['fname'],
-      lname: snapshot['lname'],
-      email: snapshot['email'],
-      password: snapshot['password'],
-      address: snapshot['address'],
-      phone: snapshot['phone'],
-    );
-  }
+  // static MechanicModel? fromSnap(DocumentSnapshot snap) {
+  //   var snapshot = snap.data() as Map<String, dynamic>;
+  //   return MechanicModel(
+  //     fname: snapshot['fname'],
+  //     lname: snapshot['lname'],
+  //     email: snapshot['email'],
+  //     password: snapshot['password'],
+  //     address: snapshot['address'],
+  //     phone: snapshot['phone'],
+  //   );
+  // }
+
+  static MechanicModel? fromJson(Map<String, dynamic> json) => MechanicModel(
+        fname: json['fname'],
+        lname: json['lname'],
+        email: json['email'],
+        password: json['password'],
+        address: json['address'],
+        phone: json['phone'],
+      );
 }
