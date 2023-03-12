@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 class NearestMechanics extends StatefulWidget {
   const NearestMechanics({super.key});
@@ -10,9 +12,32 @@ class NearestMechanics extends StatefulWidget {
   State<NearestMechanics> createState() => _NearestMechanicsState();
 }
 
+LocationData? currentLocation;
+String mecEmail = "";
+
+final FirebaseAuth auth = FirebaseAuth.instance;
+final String? userEmail = auth.currentUser!.email;
+
 class _NearestMechanicsState extends State<NearestMechanics> {
   final CollectionReference _mechanics =
       FirebaseFirestore.instance.collection('Mechanics');
+  final CollectionReference _jobRequest =
+      FirebaseFirestore.instance.collection('JobRequests');
+
+  void getCurrentLocation() async {
+    Location location = Location();
+
+    await location.getLocation().then((location) {
+      currentLocation = location;
+    });
+  }
+
+  @override
+  void initState() {
+    getCurrentLocation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,8 +81,32 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                           //margin: const EdgeInsets.all(10),
                           child: ListTile(
                             title: Text(documentSnapshot['fname']),
-                            subtitle:
-                                Text(documentSnapshot['phone'].toString()),
+                            subtitle: Text('Ratings: '),
+                            onTap: () async {
+                              if (currentLocation != null &&
+                                  userEmail != null) {
+                                print(currentLocation!.latitude);
+
+                                QuerySnapshot eventsQuery = await _mechanics
+                                    .where("email",
+                                        isEqualTo: documentSnapshot['email'])
+                                    .get();
+
+                                for (var document in eventsQuery.docs) {
+                                  mecEmail = document['email'];
+                                }
+                                print(mecEmail);
+                                print(userEmail);
+                                final json = {
+                                  'driveEmail': userEmail,
+                                  'mechanicEmail': mecEmail,
+                                  'jobRequestStatus': null,
+                                  'latitude': currentLocation!.latitude,
+                                  'longitude': currentLocation!.longitude,
+                                };
+                                await _jobRequest.doc().set(json);
+                              }
+                            },
                           ),
                         );
                       },
@@ -74,11 +123,4 @@ class _NearestMechanicsState extends State<NearestMechanics> {
       ),
     );
   }
-
-  // Stream<List<MechanicModel>> readMechanics() => FirebaseFirestore.instance
-  //     .collection('Mechanics')
-  //     .snapshots()
-  //     .map((snapshot) => snapshot.docs
-  //         .map((doc) => MechanicModel.fromJson(doc.data()))
-  //         .toList());
 }

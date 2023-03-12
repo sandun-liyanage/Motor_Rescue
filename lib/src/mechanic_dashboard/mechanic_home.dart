@@ -34,7 +34,7 @@ class MechanicHome extends StatelessWidget {
                 ),
               ),
               SizedBox(height: size.height * 0.01),
-              jobRequestWidget(context),
+              //jobRequestWidget(context),
               SizedBox(height: size.height * 0.01),
               currentJobWidget(context),
             ],
