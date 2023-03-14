@@ -21,8 +21,8 @@ final String? userEmail = auth.currentUser!.email;
 class _NearestMechanicsState extends State<NearestMechanics> {
   final CollectionReference _mechanics =
       FirebaseFirestore.instance.collection('Mechanics');
-  final CollectionReference _jobRequest =
-      FirebaseFirestore.instance.collection('JobRequests');
+  final CollectionReference _jobs =
+      FirebaseFirestore.instance.collection('Jobs');
 
   void getCurrentLocation() async {
     Location location = Location();
@@ -83,28 +83,38 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                             title: Text(documentSnapshot['fname']),
                             subtitle: Text('Ratings: '),
                             onTap: () async {
-                              if (currentLocation != null &&
-                                  userEmail != null) {
-                                print(currentLocation!.latitude);
+                              QuerySnapshot requestsQuery = await _jobs
+                                  .where("mechanicEmail",
+                                      isEqualTo: documentSnapshot['email'])
+                                  .where("jobRequestStatus",
+                                      whereIn: ["requested", "accepted"]).get();
 
-                                QuerySnapshot eventsQuery = await _mechanics
-                                    .where("email",
-                                        isEqualTo: documentSnapshot['email'])
-                                    .get();
+                              if (requestsQuery.docs.isEmpty) {
+                                if (currentLocation != null &&
+                                    userEmail != null) {
+                                  print(currentLocation!.latitude);
 
-                                for (var document in eventsQuery.docs) {
-                                  mecEmail = document['email'];
+                                  QuerySnapshot eventsQuery = await _mechanics
+                                      .where("email",
+                                          isEqualTo: documentSnapshot['email'])
+                                      .get();
+
+                                  for (var document in eventsQuery.docs) {
+                                    mecEmail = document['email'];
+                                  }
+                                  print(mecEmail);
+                                  print(userEmail);
+                                  final json = {
+                                    'driveEmail': userEmail,
+                                    'mechanicEmail': mecEmail,
+                                    'jobRequestStatus': 'requested',
+                                    'latitude': currentLocation!.latitude,
+                                    'longitude': currentLocation!.longitude,
+                                  };
+                                  await _jobs.doc().set(json);
                                 }
-                                print(mecEmail);
-                                print(userEmail);
-                                final json = {
-                                  'driveEmail': userEmail,
-                                  'mechanicEmail': mecEmail,
-                                  'jobRequestStatus': null,
-                                  'latitude': currentLocation!.latitude,
-                                  'longitude': currentLocation!.longitude,
-                                };
-                                await _jobRequest.doc().set(json);
+                              } else {
+                                print('already sent request');
                               }
                             },
                           ),
