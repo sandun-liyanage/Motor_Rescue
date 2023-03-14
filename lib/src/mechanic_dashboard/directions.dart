@@ -19,8 +19,8 @@ class Directions extends StatefulWidget {
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
-double? lat;
-double? lng;
+double? lat = 1;
+double? lng = 1;
 
 class _DirectionsState extends State<Directions> {
   final Completer<GoogleMapController> _controller = Completer();
@@ -29,18 +29,20 @@ class _DirectionsState extends State<Directions> {
       FirebaseFirestore.instance.collection('Jobs');
 
   void getDriverLocation() async {
+    lat = await 0;
+    lng = await 0;
     QuerySnapshot requestsQuery = await _jobs
         .where("mechanicEmail", isEqualTo: userEmail)
         .where("jobRequestStatus", isEqualTo: "accepted")
         .get();
 
     if (requestsQuery.docs.isNotEmpty) {
-      lat = requestsQuery.docs.first['latitude'].toDouble();
-      lng = requestsQuery.docs.first['longitude'].toDouble();
+      lat = await requestsQuery.docs.first['latitude'].toDouble();
+      lng = await requestsQuery.docs.first['longitude'].toDouble();
     }
   }
 
-  static LatLng destination = LatLng(lat!, lng!);
+  LatLng destination = LatLng(lat!, lng!);
 
   List<LatLng> polylineCordinates = [];
   LocationData? currentLocation;
@@ -84,21 +86,24 @@ class _DirectionsState extends State<Directions> {
   }
 
   void getPolyPoints() async {
-    PolylinePoints polylinePoints = PolylinePoints();
+    while (lat == 0 || lat == 1) {
+      PolylinePoints polylinePoints = PolylinePoints();
 
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      "AIzaSyDMIuR2nZ9hKQzZCy6dWJjvwdO-wm3zyOM",
-      PointLatLng(sourceLocation!.latitude!, sourceLocation!.longitude!),
-      PointLatLng(destination.latitude, destination.longitude),
-    );
-
-    if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) => polylineCordinates.add(
-          LatLng(point.latitude, point.longitude),
-        ),
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        "AIzaSyDMIuR2nZ9hKQzZCy6dWJjvwdO-wm3zyOM",
+        PointLatLng(sourceLocation!.latitude!, sourceLocation!.longitude!),
+        PointLatLng(destination.latitude, destination.longitude),
+        travelMode: TravelMode.driving,
       );
-      setState(() {});
+
+      if (result.points.isNotEmpty) {
+        result.points.forEach(
+          (PointLatLng point) => polylineCordinates.add(
+            LatLng(point.latitude, point.longitude),
+          ),
+        );
+        setState(() {});
+      }
     }
   }
 
@@ -132,7 +137,10 @@ class _DirectionsState extends State<Directions> {
         toolbarHeight: 75,
         leadingWidth: 75,
       ),
-      body: currentLocation == null && sourceLocation == null
+      body: currentLocation == null ||
+              sourceLocation == null ||
+              lat == 0 ||
+              lat == 1
           ? Center(child: const Text('Loading'))
           : GoogleMap(
               initialCameraPosition: CameraPosition(
