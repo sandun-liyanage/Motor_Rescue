@@ -1,7 +1,9 @@
-// ignore_for_file: prefer_const_constructors, unused_field, avoid_function_literals_in_foreach_calls, unused_import, await_only_futures
+// ignore_for_file: prefer_const_constructors, unused_field, avoid_function_literals_in_foreach_calls, unused_import, await_only_futures, avoid_print
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,10 +17,30 @@ class Directions extends StatefulWidget {
   State<Directions> createState() => _DirectionsState();
 }
 
+final FirebaseAuth auth = FirebaseAuth.instance;
+final String? userEmail = auth.currentUser!.email;
+double? lat;
+double? lng;
+
 class _DirectionsState extends State<Directions> {
   final Completer<GoogleMapController> _controller = Completer();
 
-  static const LatLng destination = LatLng(6.9368, 79.8525);
+  final CollectionReference _jobs =
+      FirebaseFirestore.instance.collection('Jobs');
+
+  void getDriverLocation() async {
+    QuerySnapshot requestsQuery = await _jobs
+        .where("mechanicEmail", isEqualTo: userEmail)
+        .where("jobRequestStatus", isEqualTo: "accepted")
+        .get();
+
+    if (requestsQuery.docs.isNotEmpty) {
+      lat = requestsQuery.docs.first['latitude'].toDouble();
+      lng = requestsQuery.docs.first['longitude'].toDouble();
+    }
+  }
+
+  static LatLng destination = LatLng(lat!, lng!);
 
   List<LatLng> polylineCordinates = [];
   LocationData? currentLocation;
@@ -92,6 +114,7 @@ class _DirectionsState extends State<Directions> {
 
   @override
   void initState() {
+    getDriverLocation();
     getCurrentLocation();
     setCustomMarkerIcon();
     super.initState();

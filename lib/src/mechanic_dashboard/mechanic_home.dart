@@ -19,19 +19,18 @@ String? status;
 String docId = "";
 
 class _MechanicHomeState extends State<MechanicHome> {
-  final CollectionReference _jobRequests =
+  final CollectionReference _jobs =
       FirebaseFirestore.instance.collection('Jobs');
 
   Future getStatus() async {
-    QuerySnapshot requestsQuery = await _jobRequests
+    QuerySnapshot requestsQuery = await _jobs
         .where("mechanicEmail", isEqualTo: userEmail)
-        //.where("jobRequestStatus", isEqualTo: null)
-        .get();
+        .where("jobRequestStatus", whereIn: ["requested", "accepted"]).get();
 
     for (var document in requestsQuery.docs) {
       // status = document['jobRequestStatus'];
       // docId = document.id;
-      if (document['jobRequestStatus'] == null ||
+      if (document['jobRequestStatus'] == 'requested' ||
           document['jobRequestStatus'] == "") {
         status = "requested";
         docId = requestsQuery.docs.first.id;
@@ -189,7 +188,7 @@ class _MechanicHomeState extends State<MechanicHome> {
                 InkWell(
                   onTap: () {
                     try {
-                      _jobRequests.doc(docId).update({
+                      _jobs.doc(docId).update({
                         "jobRequestStatus": "accepted",
                       });
                       setState(() {});
@@ -228,7 +227,7 @@ class _MechanicHomeState extends State<MechanicHome> {
                 InkWell(
                   onTap: () {
                     try {
-                      _jobRequests.doc(docId).update({
+                      _jobs.doc(docId).update({
                         "jobRequestStatus": "declined",
                       });
                       setState(() {});
@@ -380,7 +379,7 @@ class _MechanicHomeState extends State<MechanicHome> {
                 InkWell(
                   onTap: () {
                     try {
-                      _jobRequests.doc(docId).update({
+                      _jobs.doc(docId).update({
                         "jobRequestStatus": "completed",
                       });
                       setState(() {});
