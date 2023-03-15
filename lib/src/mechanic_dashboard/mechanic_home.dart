@@ -15,10 +15,10 @@ class MechanicHome extends StatefulWidget {
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
-String? status;
-String docId = "";
 
 class _MechanicHomeState extends State<MechanicHome> {
+  String? status;
+  String docId = "";
   final CollectionReference _jobs =
       FirebaseFirestore.instance.collection('Jobs');
 
