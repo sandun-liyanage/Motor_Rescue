@@ -27,9 +27,12 @@ class _MechanicHomeState extends State<MechanicHome> {
         .where("mechanicEmail", isEqualTo: userEmail)
         .where("jobRequestStatus", whereIn: ["requested", "accepted"]).get();
 
+    status = "";
+
     for (var document in requestsQuery.docs) {
       // status = document['jobRequestStatus'];
       // docId = document.id;
+
       if (document['jobRequestStatus'] == 'requested' ||
           document['jobRequestStatus'] == "") {
         status = "requested";
@@ -91,13 +94,6 @@ class _MechanicHomeState extends State<MechanicHome> {
                   );
                 },
               ),
-              // Center(
-              //   child: status == 'null'
-              //       ? jobRequestWidget(context)
-              //       : status == 'accepted'
-              //           ? currentJobWidget(context)
-              //           : emptyJobWidget(context),
-              // )
 
               // jobRequestWidget(context),
               // SizedBox(height: size.height * 0.01),
@@ -225,13 +221,13 @@ class _MechanicHomeState extends State<MechanicHome> {
                 ),
                 SizedBox(width: size.width * 0.025),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     try {
-                      _jobs.doc(docId).update({
+                      await _jobs.doc(docId).update({
                         "jobRequestStatus": "declined",
                       });
+                      // getStatus();
                       setState(() {});
-                      //getStatus();
                     } catch (e) {
                       print(e.toString());
                     }
@@ -316,7 +312,7 @@ class _MechanicHomeState extends State<MechanicHome> {
               children: [
                 InkWell(
                   onTap: () {
-                    //
+                    setState(() {});
                   },
                   splashColor: Colors.grey.withOpacity(0.5),
                   child: Container(

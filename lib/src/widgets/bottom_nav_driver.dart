@@ -31,19 +31,19 @@ class BottomNavDriverWidget extends StatelessWidget {
             onTabChange: (index) {
               switch (index) {
                 case 0:
-                  GoRouter.of(context).go('/mechanic');
+                  GoRouter.of(context).go('/driver');
                   break;
                 case 1:
-                  GoRouter.of(context).go('/mechanic');
+                  GoRouter.of(context).go('/driver');
                   break;
                 case 2:
-                  GoRouter.of(context).go('/mechanic');
+                  GoRouter.of(context).go('/driver');
                   break;
                 case 3:
                   //logout function
                   break;
                 default:
-                  GoRouter.of(context).go('/mechanic');
+                  GoRouter.of(context).go('/driver');
               }
             },
             tabs: [

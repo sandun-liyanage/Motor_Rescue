@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print
+// ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:location/location.dart';
 
 class NearestMechanics extends StatefulWidget {
@@ -105,7 +106,7 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                                   print(mecEmail);
                                   print(userEmail);
                                   final json = {
-                                    'driveEmail': userEmail,
+                                    'driverEmail': userEmail,
                                     'mechanicEmail': mecEmail,
                                     'jobRequestStatus': 'requested',
                                     'latitude': currentLocation!.latitude,
@@ -113,6 +114,7 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                                   };
                                   await _jobs.doc().set(json);
                                 }
+                                GoRouter.of(context).push('/driver');
                               } else {
                                 print('already sent request');
                               }
