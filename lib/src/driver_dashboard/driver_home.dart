@@ -387,7 +387,7 @@ class _DriverHomeState extends State<DriverHome> {
                 SizedBox(width: size.width * 0.025),
                 InkWell(
                   onTap: () {
-                    GoRouter.of(context).go('/mechanic/directions');
+                    GoRouter.of(context).go('/driver/liveLocation');
                   },
                   splashColor: Colors.grey.withOpacity(0.5),
                   child: Container(
