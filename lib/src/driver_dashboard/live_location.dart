@@ -27,7 +27,7 @@ String? docId;
 LocationData? destination;
 
 List<LatLng> polylineCordinates = [];
-LocationData? currentLocation;
+LatLng? currentLocation;
 LatLng sourceLocation = LatLng(lat!, lng!);
 int poly = 0;
 int src = 0;
@@ -37,6 +37,7 @@ class _LiveLocationState extends State<LiveLocation> {
 
   final CollectionReference _jobs =
       FirebaseFirestore.instance.collection('Jobs');
+  final _database = FirebaseDatabase.instance.ref();
 
   void getMechanicLocation() async {
     lat = await 0;
@@ -52,24 +53,31 @@ class _LiveLocationState extends State<LiveLocation> {
       sourceLocation = LatLng(lat!, lng!);
       src = 1;
       docId = await requestsQuery.docs.first.id;
+      liveLocation();
     }
+  }
 
-    //----------------------------------------------------------
+  void liveLocation() async {
+    QuerySnapshot requestsQuery = await _jobs
+        .where("driverEmail", isEqualTo: userEmail)
+        .where("jobRequestStatus", isEqualTo: "accepted")
+        .get();
 
-    DatabaseReference ref = FirebaseDatabase.instance.ref("Jobs/${docId!}");
-
-    ref.onValue.listen((DatabaseEvent event) {
-      final data = event.snapshot.value;
-      print('ssssssssssssssssssssssssssssssssssssssssssssss');
-      print(data);
+    if (requestsQuery.docs.isNotEmpty) {
+      lat = await requestsQuery.docs.first['mechanicLat'].toDouble();
+      lng = await requestsQuery.docs.first['mechanicLng'].toDouble();
+      currentLocation = LatLng(lat!, lng!);
+    }
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        setState(() {});
+      }
+      liveLocation();
     });
-    // Stream<DatabaseEvent> stream = ref.onValue;
-
-    // stream.listen((DatabaseEvent event) {
-    //   print('Event Type: ${event.type}');
-    //   print('Snapshot: ${event.snapshot}');
-    //   print('sssssssssssssssssssssssssssssssssssssssssssssssssssssssssss');
-    // });
+    // if (mounted) {
+    //   setState(() {});
+    // }
+    // liveLocation();
   }
 
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
@@ -79,27 +87,15 @@ class _LiveLocationState extends State<LiveLocation> {
 
     location.getLocation().then((location) {
       destination = location;
-      currentLocation = location;
+      //currentLocation = location;
       //sourceLocation = location;
 
       getPolyPoints();
     });
-
-    //GoogleMapController googleMapController = await _controller.future;
-
-    // location.onLocationChanged.listen(
-    //   (newLocation) {
-    //     currentLocation = newLocation;
-
-    //     if (mounted) {
-    //       setState(() {});
-    //     }
-    //   },
-    // );
   }
 
   void getPolyPoints() async {
-    if (lat != 0) {
+    if (poly == 0) {
       PolylinePoints polylinePoints = await PolylinePoints();
 
       PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -139,6 +135,7 @@ class _LiveLocationState extends State<LiveLocation> {
   @override
   void initState() {
     getMechanicLocation();
+    liveLocation();
     getLocation();
     setCustomMarkerIcon();
     super.initState();
@@ -181,7 +178,7 @@ class _LiveLocationState extends State<LiveLocation> {
                   markerId: MarkerId('currentLocation'),
                   icon: currentLocationIcon,
                   position: LatLng(
-                      currentLocation!.latitude!, currentLocation!.longitude!),
+                      currentLocation!.latitude, currentLocation!.longitude),
                 ),
                 Marker(
                   markerId: MarkerId('source'),
