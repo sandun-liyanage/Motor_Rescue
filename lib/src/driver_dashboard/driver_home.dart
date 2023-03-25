@@ -192,7 +192,7 @@ class _DriverHomeState extends State<DriverHome> {
   Widget jobRequestWidget(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.425,
+      height: size.height * 0.45,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),

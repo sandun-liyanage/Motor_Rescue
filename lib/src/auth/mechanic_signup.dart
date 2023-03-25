@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:location/location.dart';
 
 import '../services/auth.dart';
 
@@ -19,9 +20,25 @@ final passwordController = TextEditingController();
 final addressController = TextEditingController();
 final phoneController = TextEditingController();
 
+LocationData? currentLocation;
+
 final _formKey = GlobalKey<FormState>();
 
 class _MechanicSignupState extends State<MechanicSignup> {
+  void getCurrentLocation() async {
+    Location location = Location();
+
+    await location.getLocation().then((location) {
+      currentLocation = location;
+    });
+  }
+
+  @override
+  void initState() {
+    getCurrentLocation();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -71,7 +88,9 @@ class _MechanicSignupState extends State<MechanicSignup> {
                     width: double.infinity,
                     height: 75,
                     child: ElevatedButton(
-                      onPressed: () => _signUp(context),
+                      onPressed: () async {
+                        _signUp(context);
+                      },
                       child: const Text(
                         'SIGNUP',
                         style: TextStyle(
@@ -367,7 +386,10 @@ Future<void> _signUp(BuildContext context) async {
         email: emailController.text,
         password: passwordController.text,
         address: addressController.text,
-        phone: phoneController.text);
+        phone: phoneController.text,
+        lat: currentLocation!.latitude,
+        lng: currentLocation!.longitude);
+
     if (result == 'success') {
       GoRouter.of(context).go('/MechanicLogin');
     } else {

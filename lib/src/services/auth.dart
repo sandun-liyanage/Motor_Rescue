@@ -68,6 +68,8 @@ class AuthMethods {
     required String? password,
     required String? address,
     required String? phone,
+    required double? lat,
+    required double? lng,
   }) async {
     String result = 'Some error occurred';
     try {
@@ -82,6 +84,8 @@ class AuthMethods {
           password: password,
           address: address,
           phone: phone!,
+          lat: lat!,
+          lng: lng!,
         );
 
         await _firestore.collection('Mechanics').doc().set(

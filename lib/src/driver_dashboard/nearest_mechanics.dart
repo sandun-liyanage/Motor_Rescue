@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:location/location.dart';
 
@@ -15,6 +16,7 @@ class NearestMechanics extends StatefulWidget {
 
 LocationData? currentLocation;
 String mecEmail = "";
+var arr = List;
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
@@ -33,9 +35,20 @@ class _NearestMechanicsState extends State<NearestMechanics> {
     });
   }
 
+  void getNearestMechanics() async {
+    getCurrentLocation();
+    QuerySnapshot requestsQuery = await _mechanics.get();
+
+    for (var document in requestsQuery.docs) {
+      double dis = Geolocator.distanceBetween(document['lat'], document['lng'],
+          currentLocation!.latitude!, currentLocation!.longitude!);
+      await _mechanics.doc(document.id).update({'distance': dis});
+    }
+  }
+
   @override
   void initState() {
-    getCurrentLocation();
+    getNearestMechanics();
     super.initState();
   }
 
@@ -67,7 +80,9 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                 ),
               ),
               StreamBuilder(
-                stream: _mechanics.snapshots(),
+                stream: _mechanics
+                    .orderBy('distance', descending: false)
+                    .snapshots(),
                 builder:
                     (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                   if (streamSnapshot.hasData) {
@@ -81,8 +96,13 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                         return Card(
                           //margin: const EdgeInsets.all(10),
                           child: ListTile(
+                            leading: Icon(Icons.person_2_rounded),
                             title: Text(documentSnapshot['fname']),
-                            subtitle: Text('Ratings: '),
+                            subtitle: Text(
+                                "Ratings:  \nDistance: ${documentSnapshot['distance']}"),
+                            //tileColor: Color.fromARGB(255, 217, 174, 240),
+                            isThreeLine: true,
+                            iconColor: Colors.blue,
                             onTap: () async {
                               QuerySnapshot requestsQuery = await _jobs
                                   .where("mechanicEmail",
