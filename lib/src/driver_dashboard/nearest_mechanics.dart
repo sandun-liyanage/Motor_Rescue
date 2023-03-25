@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:location/location.dart';
+import 'package:motor_rescue/src/widgets/bottom_nav_driver.dart';
 
 class NearestMechanics extends StatefulWidget {
   const NearestMechanics({super.key});
@@ -16,7 +17,7 @@ class NearestMechanics extends StatefulWidget {
 
 LocationData? currentLocation;
 String mecEmail = "";
-var arr = List;
+double dis = 0;
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
@@ -40,8 +41,9 @@ class _NearestMechanicsState extends State<NearestMechanics> {
     QuerySnapshot requestsQuery = await _mechanics.get();
 
     for (var document in requestsQuery.docs) {
-      double dis = Geolocator.distanceBetween(document['lat'], document['lng'],
+      dis = Geolocator.distanceBetween(document['lat'], document['lng'],
           currentLocation!.latitude!, currentLocation!.longitude!);
+      dis = double.parse((dis / 1000).toStringAsExponential(2));
       await _mechanics.doc(document.id).update({'distance': dis});
     }
   }
@@ -62,6 +64,7 @@ class _NearestMechanicsState extends State<NearestMechanics> {
         toolbarHeight: 75,
         leadingWidth: 75,
       ),
+      bottomNavigationBar: BottomNavDriverWidget(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(10),
@@ -94,15 +97,29 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                         final DocumentSnapshot documentSnapshot =
                             streamSnapshot.data!.docs[index];
                         return Card(
-                          //margin: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          color: Color.fromARGB(255, 215, 193, 226),
                           child: ListTile(
-                            leading: Icon(Icons.person_2_rounded),
-                            title: Text(documentSnapshot['fname']),
+                            leading: Icon(Icons.person_2_rounded, size: 45),
+                            title: Text(
+                              documentSnapshot['fname'],
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             subtitle: Text(
-                                "Ratings:  \nDistance: ${documentSnapshot['distance']}"),
-                            //tileColor: Color.fromARGB(255, 217, 174, 240),
+                              "Ratings:  \nDistance: ${documentSnapshot['distance']} KM",
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             isThreeLine: true,
-                            iconColor: Colors.blue,
+                            iconColor: Colors.blueGrey,
                             onTap: () async {
                               QuerySnapshot requestsQuery = await _jobs
                                   .where("mechanicEmail",
@@ -131,6 +148,7 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                                     'jobRequestStatus': 'requested',
                                     'latitude': currentLocation!.latitude,
                                     'longitude': currentLocation!.longitude,
+                                    'distance': dis,
                                   };
                                   await _jobs.doc().set(json);
                                 }
