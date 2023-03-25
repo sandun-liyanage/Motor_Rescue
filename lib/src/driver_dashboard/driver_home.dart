@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:motor_rescue/src/live_chat/chat_page.dart';
 import 'package:motor_rescue/src/widgets/bottom_nav_driver.dart';
 
 class DriverHome extends StatefulWidget {
@@ -15,6 +16,8 @@ class DriverHome extends StatefulWidget {
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
+String? mecEmail;
+String? driverEmail;
 
 class _DriverHomeState extends State<DriverHome> {
   String? status;
@@ -28,6 +31,8 @@ class _DriverHomeState extends State<DriverHome> {
         .where("jobRequestStatus", whereIn: ["requested", "accepted"]).get();
 
     status = "";
+    mecEmail = requestsQuery.docs.first['mechanicEmail'];
+    driverEmail = requestsQuery.docs.first['driverEmail'];
 
     for (var document in requestsQuery.docs) {
       if (document['jobRequestStatus'] == 'requested' ||
@@ -235,7 +240,8 @@ class _DriverHomeState extends State<DriverHome> {
               children: [
                 InkWell(
                   onTap: () {
-                    setState(() {});
+                    chatpage(id: "$driverEmail-$mecEmail");
+                    //setState(() {});
                   },
                   splashColor: Colors.grey.withOpacity(0.5),
                   child: Container(
@@ -356,7 +362,8 @@ class _DriverHomeState extends State<DriverHome> {
               children: [
                 InkWell(
                   onTap: () {
-                    //
+                    GoRouter.of(context)
+                        .go('/driver/chatWithMechanic/$driverEmail-$mecEmail');
                   },
                   splashColor: Colors.grey.withOpacity(0.5),
                   child: Container(
