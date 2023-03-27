@@ -18,17 +18,18 @@ class _messagesState extends State<messages> {
   String id;
   _messagesState({required this.id});
 
-  Stream<QuerySnapshot> _messageStream = FirebaseFirestore.instance
-      .collection('Messages')
-      .orderBy('time')
-      .snapshots();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: _messageStream,
+      stream: FirebaseFirestore.instance
+          .collection('Messages')
+          .where("id", isEqualTo: id)
+          .orderBy('time')
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return Text("something is wrong");
+          print(snapshot.error);
+          return Text("something is wrong ${snapshot.error}");
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -63,7 +64,8 @@ class _messagesState extends State<messages> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       title: Text(
-                        qs['email'],
+                        //qs['email']
+                        "You",
                         style: TextStyle(
                           fontSize: 15,
                         ),
