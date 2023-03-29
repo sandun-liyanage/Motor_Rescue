@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:motor_rescue/src/live_chat/chat_page.dart';
 import 'package:motor_rescue/src/widgets/bottom_nav_driver.dart';
 
 class DriverHome extends StatefulWidget {
@@ -240,7 +239,8 @@ class _DriverHomeState extends State<DriverHome> {
               children: [
                 InkWell(
                   onTap: () {
-                    chatpage(id: "$driverEmail-$mecEmail");
+                    GoRouter.of(context)
+                        .go('/driver/chatWithMechanic/$driverEmail-$mecEmail');
                     //setState(() {});
                   },
                   splashColor: Colors.grey.withOpacity(0.5),

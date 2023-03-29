@@ -15,6 +15,8 @@ class MechanicHome extends StatefulWidget {
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
+String? mecEmail;
+String? driverEmail;
 
 class _MechanicHomeState extends State<MechanicHome> {
   String? status;
@@ -28,6 +30,8 @@ class _MechanicHomeState extends State<MechanicHome> {
         .where("jobRequestStatus", whereIn: ["requested", "accepted"]).get();
 
     status = "";
+    mecEmail = requestsQuery.docs.first['mechanicEmail'];
+    driverEmail = requestsQuery.docs.first['driverEmail'];
 
     for (var document in requestsQuery.docs) {
       // status = document['jobRequestStatus'];
@@ -152,7 +156,8 @@ class _MechanicHomeState extends State<MechanicHome> {
               children: [
                 InkWell(
                   onTap: () {
-                    //
+                    GoRouter.of(context)
+                        .go('/mechanic/chatWithDriver/$driverEmail-$mecEmail');
                   },
                   splashColor: Colors.grey.withOpacity(0.5),
                   child: Container(
@@ -312,7 +317,8 @@ class _MechanicHomeState extends State<MechanicHome> {
               children: [
                 InkWell(
                   onTap: () {
-                    setState(() {});
+                    GoRouter.of(context)
+                        .go('/mechanic/chatWithDriver/$driverEmail-$mecEmail');
                   },
                   splashColor: Colors.grey.withOpacity(0.5),
                   child: Container(
