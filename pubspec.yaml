@@ -47,6 +47,9 @@ dependencies:
   geolocator: ^8.2.0
   geocoding: ^2.0.4
   firebase_database: ^10.0.16
+  flutter_stripe: ^9.0.0+1
+  get: ^4.6.5
+  http: ^0.13.5
   
   
 

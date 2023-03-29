@@ -3,7 +3,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:motor_rescue/src/controllers/payment_controller.dart';
 import 'package:motor_rescue/src/widgets/bottom_nav_driver.dart';
 
 class DriverHome extends StatefulWidget {
@@ -17,8 +19,10 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
 String? mecEmail;
 String? driverEmail;
+String? fee;
 
 class _DriverHomeState extends State<DriverHome> {
+  final PaymentController controller = Get.put(PaymentController());
   String? status;
   String docId = "";
   final CollectionReference _jobs =
@@ -27,11 +31,15 @@ class _DriverHomeState extends State<DriverHome> {
   Future getStatus() async {
     QuerySnapshot requestsQuery = await _jobs
         .where("driverEmail", isEqualTo: userEmail)
-        .where("jobRequestStatus", whereIn: ["requested", "accepted"]).get();
+        .where("jobRequestStatus",
+            whereIn: ["requested", "accepted", "completed"]).get();
 
     status = "";
-    mecEmail = requestsQuery.docs.first['mechanicEmail'];
-    driverEmail = requestsQuery.docs.first['driverEmail'];
+    if (requestsQuery.docs.isNotEmpty) {
+      mecEmail = requestsQuery.docs.first['mechanicEmail'];
+      driverEmail = requestsQuery.docs.first['driverEmail'];
+      fee = requestsQuery.docs.first['fee'];
+    }
 
     for (var document in requestsQuery.docs) {
       if (document['jobRequestStatus'] == 'requested' ||
@@ -40,6 +48,9 @@ class _DriverHomeState extends State<DriverHome> {
         docId = requestsQuery.docs.first.id;
       } else if (document['jobRequestStatus'] == 'accepted') {
         status = "accepted";
+        docId = requestsQuery.docs.first.id;
+      } else if (document['jobRequestStatus'] == 'completed') {
+        status = "completed";
         docId = requestsQuery.docs.first.id;
       } else {
         status = "";
@@ -88,6 +99,8 @@ class _DriverHomeState extends State<DriverHome> {
                     return jobRequestWidget(context);
                   } else if (status == 'accepted') {
                     return currentJobWidget(context);
+                  } else if (status == 'completed') {
+                    return paymentWidget(size, context);
                   } else {
                     return getAssistance(size, context);
                   }
@@ -460,6 +473,82 @@ class _DriverHomeState extends State<DriverHome> {
                       ],
                     ),
                   ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //----------------------------------------------------------------
+
+  Widget paymentWidget(Size size, BuildContext context) {
+    return Container(
+      height: size.height * 0.33,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blueGrey.withOpacity(0.7),
+
+            blurRadius: 10,
+            //offset: Offset(0, 0), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: size.height * 0.25,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              image: const DecorationImage(
+                  image: AssetImage('assets/images/payment.jpg'),
+                  fit: BoxFit.cover),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blueGrey.withOpacity(0.5),
+
+                  blurRadius: 10,
+                  //offset: Offset(0, 0), // changes position of shadow
+                ),
+              ],
+            ),
+            //child: Image(image: AssetImage('assets/images/vBreakdown.png')),
+          ),
+          SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    'You have a payment due for your previouse job.',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    controller.makePayment(
+                        amount: fee.toString(), currency: 'USD');
+                  },
+                  style: ElevatedButton.styleFrom(
+                      textStyle:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.blue,
+                      side: BorderSide(width: 3, color: Colors.blue),
+                      elevation: 15),
+                  child: Text('Make Payment'),
                 ),
               ],
             ),

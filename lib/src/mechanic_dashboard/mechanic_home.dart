@@ -19,6 +19,7 @@ String? mecEmail;
 String? driverEmail;
 
 class _MechanicHomeState extends State<MechanicHome> {
+  late TextEditingController feeController;
   String? status;
   String docId = "";
   final CollectionReference _jobs =
@@ -30,8 +31,10 @@ class _MechanicHomeState extends State<MechanicHome> {
         .where("jobRequestStatus", whereIn: ["requested", "accepted"]).get();
 
     status = "";
-    mecEmail = requestsQuery.docs.first['mechanicEmail'];
-    driverEmail = requestsQuery.docs.first['driverEmail'];
+    if (requestsQuery.docs.isNotEmpty) {
+      mecEmail = requestsQuery.docs.first['mechanicEmail'];
+      driverEmail = requestsQuery.docs.first['driverEmail'];
+    }
 
     for (var document in requestsQuery.docs) {
       // status = document['jobRequestStatus'];
@@ -53,7 +56,14 @@ class _MechanicHomeState extends State<MechanicHome> {
   @override
   void initState() {
     getStatus();
+    feeController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    feeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -381,9 +391,32 @@ class _MechanicHomeState extends State<MechanicHome> {
                 InkWell(
                   onTap: () {
                     try {
-                      _jobs.doc(docId).update({
-                        "jobRequestStatus": "completed",
-                      });
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Enter your fee (LKR)'),
+                          content: TextField(
+                            autofocus: true,
+                            decoration: InputDecoration(
+                                hintText: 'Enter your job fee here.'),
+                            controller: feeController,
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                _jobs
+                                    .doc(docId)
+                                    .update({"fee": feeController.text});
+                                _jobs.doc(docId).update({
+                                  "jobRequestStatus": "completed",
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('Submit'),
+                            )
+                          ],
+                        ),
+                      );
                       setState(() {});
                       //getStatus();
                     } catch (e) {

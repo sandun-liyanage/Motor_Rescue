@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../services/auth.dart';
+import '../controllers/auth.dart';
 
 class MechanicLogin extends StatefulWidget {
   const MechanicLogin({super.key});

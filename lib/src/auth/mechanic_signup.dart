@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:location/location.dart';
 
-import '../services/auth.dart';
+import '../controllers/auth.dart';
 
 class MechanicSignup extends StatefulWidget {
   const MechanicSignup({super.key});
