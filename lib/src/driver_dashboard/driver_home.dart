@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, dead_code
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, dead_code, unrelated_type_equality_checks
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -535,7 +535,9 @@ class _DriverHomeState extends State<DriverHome> {
                 ElevatedButton(
                   onPressed: () {
                     controller.makePayment(
-                        amount: fee.toString(), currency: 'USD');
+                        amount: fee.toString(),
+                        currency: 'LKR',
+                        context: context);
                   },
                   style: ElevatedButton.styleFrom(
                       textStyle:

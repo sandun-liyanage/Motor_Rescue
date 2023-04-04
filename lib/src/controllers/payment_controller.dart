@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously, prefer_const_constructors
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -9,8 +9,10 @@ import 'package:http/http.dart' as http;
 class PaymentController extends GetxController {
   Map<String, dynamic>? paymentIntentData;
 
-  Future<void> makePayment(
-      {required String amount, required String currency}) async {
+  Future<bool> makePayment(
+      {required String amount,
+      required String currency,
+      required BuildContext context}) async {
     try {
       paymentIntentData = await createPaymentIntent(amount, currency);
       if (paymentIntentData != null) {
@@ -25,22 +27,31 @@ class PaymentController extends GetxController {
           paymentIntentClientSecret: paymentIntentData!['client_secret'],
           customerEphemeralKeySecret: paymentIntentData!['ephemeralKey'],
         ));
-        displayPaymentSheet();
+
+        displayPaymentSheet(context);
       }
+      return false;
     } catch (e, s) {
       print('exception:$e$s');
+      return false;
     }
   }
 
-  displayPaymentSheet() async {
+  displayPaymentSheet(BuildContext context) async {
     try {
       await Stripe.instance.presentPaymentSheet();
-      Get.snackbar('Payment', 'Payment Successful',
-          snackPosition: SnackPosition.BOTTOM,
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Payment Successful.'),
           backgroundColor: Colors.green,
-          colorText: Colors.white,
-          margin: const EdgeInsets.all(10),
-          duration: const Duration(seconds: 2));
+        ),
+      );
+      // Get.snackbar('Payment', 'Payment Successful',
+      //     snackPosition: SnackPosition.BOTTOM,
+      //     backgroundColor: Colors.green,
+      //     colorText: Colors.white,
+      //     margin: const EdgeInsets.all(10),
+      //     duration: const Duration(seconds: 2));
     } on Exception catch (e) {
       if (e is StripeException) {
         print("Error from Stripe: ${e.error.localizedMessage}");
