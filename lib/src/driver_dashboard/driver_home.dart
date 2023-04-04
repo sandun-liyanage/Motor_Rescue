@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, dead_code, unrelated_type_equality_checks
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, dead_code, unrelated_type_equality_checks, prefer_is_empty
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -56,6 +56,13 @@ class _DriverHomeState extends State<DriverHome> {
         status = "";
       }
     }
+
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    //   if (mounted) {
+    //     setState(() {});
+    //   }
+    //   getStatus();
+    // });
   }
 
   @override
@@ -92,18 +99,47 @@ class _DriverHomeState extends State<DriverHome> {
                 ),
               ),
               SizedBox(height: 20),
-              FutureBuilder(
-                future: getStatus(),
+              StreamBuilder(
+                stream: _jobs
+                    .where("driverEmail", isEqualTo: userEmail)
+                    .where("jobRequestStatus", whereIn: [
+                  "requested",
+                  "accepted",
+                  "completed"
+                ]).snapshots(),
                 builder: (BuildContext context, snapshot) {
-                  if (status == 'requested') {
-                    return jobRequestWidget(context);
-                  } else if (status == 'accepted') {
-                    return currentJobWidget(context);
-                  } else if (status == 'completed') {
-                    return paymentWidget(size, context);
-                  } else {
-                    return getAssistance(size, context);
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.docs.length > 0) {
+                      if (snapshot.data!.docs[0]['jobRequestStatus'] ==
+                          'requested') {
+                        getStatus();
+                        return jobRequestWidget(context);
+                      } else if (snapshot.data!.docs[0]['jobRequestStatus'] ==
+                          'accepted') {
+                        getStatus();
+                        return currentJobWidget(context);
+                      } else if (snapshot.data!.docs[0]['jobRequestStatus'] ==
+                          'completed') {
+                        getStatus();
+                        return paymentWidget(size, context);
+                      } else {
+                        getStatus();
+                        return getAssistance(size, context);
+                      }
+                    } else {
+                      getStatus();
+                      return getAssistance(size, context);
+                    }
                   }
+                  // if (status == 'requested') {
+                  //   return jobRequestWidget(context);
+                  // } else if (status == 'accepted') {
+                  //   return currentJobWidget(context);
+                  // } else if (status == 'completed') {
+                  //   return paymentWidget(size, context);
+                  // } else {
+                  //   return getAssistance(size, context);
+                  // }
                   return const Center(
                     child: CircularProgressIndicator(),
                   );

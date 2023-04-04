@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison, use_build_context_synchronously, avoid_print, avoid_init_to_null, unrelated_type_equality_checks, dead_code
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_null_comparison, use_build_context_synchronously, avoid_print, avoid_init_to_null, unrelated_type_equality_checks, dead_code, prefer_is_empty
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -93,16 +93,41 @@ class _MechanicHomeState extends State<MechanicHome> {
                 ),
               ),
               SizedBox(height: size.height * 0.01),
-              FutureBuilder(
-                future: getStatus(),
+              StreamBuilder(
+                stream: _jobs
+                    .where("mechanicEmail", isEqualTo: userEmail)
+                    .where("jobRequestStatus", whereIn: [
+                  "requested",
+                  "accepted",
+                  "completed"
+                ]).snapshots(),
                 builder: (BuildContext context, snapshot) {
-                  if (status == 'requested') {
-                    return jobRequestWidget(context);
-                  } else if (status == 'accepted') {
-                    return currentJobWidget(context);
-                  } else {
-                    return emptyJobWidget(context);
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.docs.length > 0) {
+                      if (snapshot.data!.docs[0]['jobRequestStatus'] ==
+                          'requested') {
+                        getStatus();
+                        return jobRequestWidget(context);
+                      } else if (snapshot.data!.docs[0]['jobRequestStatus'] ==
+                          'accepted') {
+                        getStatus();
+                        return currentJobWidget(context);
+                      } else {
+                        getStatus();
+                        return emptyJobWidget(context);
+                      }
+                    } else {
+                      getStatus();
+                      return emptyJobWidget(context);
+                    }
                   }
+                  // if (status == 'requested') {
+                  //   return jobRequestWidget(context);
+                  // } else if (status == 'accepted') {
+                  //   return currentJobWidget(context);
+                  // } else {
+                  //   return emptyJobWidget(context);
+                  // }
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
