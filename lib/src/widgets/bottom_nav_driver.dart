@@ -34,13 +34,14 @@ class BottomNavDriverWidget extends StatelessWidget {
                   GoRouter.of(context).go('/driver');
                   break;
                 case 1:
-                  GoRouter.of(context).go('/driver');
+                  GoRouter.of(context).go('/driver/nearestMechanics');
                   break;
                 case 2:
-                  GoRouter.of(context).go('/driver');
+                  GoRouter.of(context).go('/driverLogin');
                   break;
                 case 3:
                   //logout function
+                  Navigator.of(context).pop();
                   break;
                 default:
                   GoRouter.of(context).go('/driver');

@@ -60,16 +60,17 @@ class _MechanicHomeState extends State<MechanicHome> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    feeController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   feeController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: AppBar(),
       bottomNavigationBar: BottomNavMechanicWidget(),
       body: SingleChildScrollView(
         child: Padding(
@@ -227,7 +228,7 @@ class _MechanicHomeState extends State<MechanicHome> {
                       _jobs.doc(docId).update({
                         "jobRequestStatus": "accepted",
                       });
-                      setState(() {});
+                      //setState(() {});
                       //getStatus();
                     } catch (e) {
                       print(e.toString());
@@ -267,7 +268,7 @@ class _MechanicHomeState extends State<MechanicHome> {
                         "jobRequestStatus": "declined",
                       });
                       // getStatus();
-                      setState(() {});
+                      //setState(() {});
                     } catch (e) {
                       print(e.toString());
                     }
@@ -442,7 +443,7 @@ class _MechanicHomeState extends State<MechanicHome> {
                           ],
                         ),
                       );
-                      setState(() {});
+                      //setState(() {});
                       //getStatus();
                     } catch (e) {
                       print(e.toString());
@@ -533,7 +534,9 @@ class _MechanicHomeState extends State<MechanicHome> {
                 SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
-                    setState(() {});
+                    if (mounted) {
+                      //setState(() {});
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(

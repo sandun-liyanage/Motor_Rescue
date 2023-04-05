@@ -1,14 +1,19 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-class BottomNavMechanicWidget extends StatelessWidget {
-  const BottomNavMechanicWidget({
-    super.key,
-  });
+class BottomNavMechanicWidget extends StatefulWidget {
+  const BottomNavMechanicWidget({super.key});
 
+  @override
+  State<BottomNavMechanicWidget> createState() =>
+      _BottomNavMechanicWidgetState();
+}
+
+class _BottomNavMechanicWidgetState extends State<BottomNavMechanicWidget> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -34,13 +39,19 @@ class BottomNavMechanicWidget extends StatelessWidget {
                   GoRouter.of(context).go('/mechanic');
                   break;
                 case 1:
-                  GoRouter.of(context).go('/mechanic');
+                  GoRouter.of(context).go('/driver');
                   break;
                 case 2:
-                  GoRouter.of(context).go('/mechanic');
+                  GoRouter.of(context).go('/mechanic/directions');
                   break;
                 case 3:
-                  //logout function
+                  if (mounted) {
+                    GoRouter.of(context).go('/driver');
+                    //Navigator.of(context).pop();
+                    //context.pop();
+                  }
+                  FirebaseAuth.instance.signOut();
+
                   break;
                 default:
                   GoRouter.of(context).go('/mechanic');
@@ -94,3 +105,12 @@ class BottomNavMechanicWidget extends StatelessWidget {
     );
   }
 }
+
+// class BottomNavMechanicWidget extends StatelessWidget {
+//   const BottomNavMechanicWidget({
+//     super.key,
+//   });
+
+//   @override
+  
+// }
