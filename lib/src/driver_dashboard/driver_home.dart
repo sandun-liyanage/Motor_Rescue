@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, dead_code, unrelated_type_equality_checks, prefer_is_empty
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, dead_code, unrelated_type_equality_checks, prefer_is_empty, use_build_context_synchronously, unnecessary_string_interpolations
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:motor_rescue/src/controllers/payment_controller.dart';
@@ -20,19 +21,30 @@ final String? userEmail = auth.currentUser!.email;
 String? mecEmail;
 String? driverEmail;
 String? fee;
+String? userName;
+int ratingVal = 0;
 
 class _DriverHomeState extends State<DriverHome> {
   final PaymentController controller = Get.put(PaymentController());
+  final ratingController = TextEditingController();
   String? status;
   String docId = "";
   final CollectionReference _jobs =
       FirebaseFirestore.instance.collection('Jobs');
+  final CollectionReference _drivers =
+      FirebaseFirestore.instance.collection('Drivers');
+  final CollectionReference _mechanics =
+      FirebaseFirestore.instance.collection('Mechanics');
 
   Future getStatus() async {
     QuerySnapshot requestsQuery = await _jobs
         .where("driverEmail", isEqualTo: userEmail)
-        .where("jobRequestStatus",
-            whereIn: ["requested", "accepted", "completed"]).get();
+        .where("jobRequestStatus", whereIn: [
+      "requested",
+      "accepted",
+      "completed",
+      "completed/paid"
+    ]).get();
 
     status = "";
     if (requestsQuery.docs.isNotEmpty) {
@@ -52,23 +64,67 @@ class _DriverHomeState extends State<DriverHome> {
       } else if (document['jobRequestStatus'] == 'completed') {
         status = "completed";
         docId = requestsQuery.docs.first.id;
+      } else if (document['jobRequestStatus'] == 'completed/paid') {
+        status = "completed/paid";
+        docId = requestsQuery.docs.first.id;
       } else {
         status = "";
       }
     }
 
-    // Future.delayed(const Duration(milliseconds: 500), () {
-    //   if (mounted) {
-    //     setState(() {});
-    //   }
-    //   getStatus();
-    // });
+    //--------------------get user's name--------------------------
+
+    QuerySnapshot driverQuery =
+        await _drivers.where("email", isEqualTo: userEmail).get();
+
+    if (driverQuery.docs.isNotEmpty) {
+      userName = await driverQuery.docs.first['fname'];
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void setRating() async {
+    QuerySnapshot ratingQuery = await _jobs
+        .where("mechanicEmail", isEqualTo: mecEmail)
+        .where("jobRequestStatus", isEqualTo: "completed/paid/rated")
+        .get();
+
+    var length = ratingQuery.docs.length;
+    num ratingTotal = 0;
+    for (var document in ratingQuery.docs) {
+      ratingTotal = ratingTotal + document['rating'];
+      print(ratingTotal);
+    }
+
+    var tempRating = (ratingTotal / length);
+
+    //---------------------------------------------------
+
+    QuerySnapshot mechanicQuery =
+        await _mechanics.where("email", isEqualTo: mecEmail).get();
+
+    String tempMecId;
+    if (mechanicQuery.docs.isNotEmpty) {
+      tempMecId = mechanicQuery.docs.first.id;
+
+      _mechanics.doc(tempMecId).update({
+        "rating": tempRating,
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    ratingController.dispose();
+    super.dispose();
   }
 
   @override
   void initState() {
     getStatus();
-
+    ratingVal = 0;
     super.initState();
   }
 
@@ -77,91 +133,93 @@ class _DriverHomeState extends State<DriverHome> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       bottomNavigationBar: BottomNavDriverWidget(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: size.width * 0.5),
-                  child: Text(
-                    'Hello... Welcome back Sandun',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "Gabriela-Regular",
+      body: userName == null
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: size.width * 0.5),
+                        child: Text(
+                          'Hello... Welcome back $userName',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "Gabriela-Regular",
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 20),
+                    StreamBuilder(
+                      stream: _jobs
+                          .where("driverEmail", isEqualTo: userEmail)
+                          .where("jobRequestStatus", whereIn: [
+                        "requested",
+                        "accepted",
+                        "completed",
+                        "completed/paid"
+                      ]).snapshots(),
+                      builder: (BuildContext context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data!.docs.length > 0) {
+                            if (snapshot.data!.docs[0]['jobRequestStatus'] ==
+                                'requested') {
+                              getStatus();
+                              return jobRequestWidget(context);
+                            } else if (snapshot.data!.docs[0]
+                                    ['jobRequestStatus'] ==
+                                'accepted') {
+                              getStatus();
+                              return currentJobWidget(context);
+                            } else if (snapshot.data!.docs[0]
+                                    ['jobRequestStatus'] ==
+                                'completed') {
+                              getStatus();
+                              return paymentWidget(size, context);
+                            } else if (snapshot.data!.docs[0]
+                                    ['jobRequestStatus'] ==
+                                'completed/paid') {
+                              getStatus();
+                              return ratingWidget(size, context);
+                            } else {
+                              getStatus();
+                              return getAssistance(size, context);
+                            }
+                          } else {
+                            getStatus();
+                            return getAssistance(size, context);
+                          }
+                        }
+
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
+                    //jobRequestWidget(context),
+                    //currentJobWidget(context),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                    //   child: Text(
+                    //     'Tips',
+                    //     style: TextStyle(
+                    //       fontSize: 25,
+                    //       fontWeight: FontWeight.bold,
+                    //       fontFamily: "Gabriela-Regular",
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
                 ),
               ),
-              SizedBox(height: 20),
-              StreamBuilder(
-                stream: _jobs
-                    .where("driverEmail", isEqualTo: userEmail)
-                    .where("jobRequestStatus", whereIn: [
-                  "requested",
-                  "accepted",
-                  "completed"
-                ]).snapshots(),
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.docs.length > 0) {
-                      if (snapshot.data!.docs[0]['jobRequestStatus'] ==
-                          'requested') {
-                        getStatus();
-                        return jobRequestWidget(context);
-                      } else if (snapshot.data!.docs[0]['jobRequestStatus'] ==
-                          'accepted') {
-                        getStatus();
-                        return currentJobWidget(context);
-                      } else if (snapshot.data!.docs[0]['jobRequestStatus'] ==
-                          'completed') {
-                        getStatus();
-                        return paymentWidget(size, context);
-                      } else {
-                        getStatus();
-                        return getAssistance(size, context);
-                      }
-                    } else {
-                      getStatus();
-                      return getAssistance(size, context);
-                    }
-                  }
-                  // if (status == 'requested') {
-                  //   return jobRequestWidget(context);
-                  // } else if (status == 'accepted') {
-                  //   return currentJobWidget(context);
-                  // } else if (status == 'completed') {
-                  //   return paymentWidget(size, context);
-                  // } else {
-                  //   return getAssistance(size, context);
-                  // }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-              //jobRequestWidget(context),
-              //currentJobWidget(context),
-              // Padding(
-              //   padding: const EdgeInsets.symmetric(horizontal: 10),
-              //   child: Text(
-              //     'Tips',
-              //     style: TextStyle(
-              //       fontSize: 25,
-              //       fontWeight: FontWeight.bold,
-              //       fontFamily: "Gabriela-Regular",
-              //     ),
-              //   ),
-              // ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
@@ -588,6 +646,161 @@ class _DriverHomeState extends State<DriverHome> {
                       elevation: 15),
                   child: Text('Make Payment'),
                 ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //----------------------------------------------------------------
+
+  Widget ratingWidget(Size size, BuildContext context) {
+    return Container(
+      height: size.height * 0.6,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.blueGrey.withOpacity(0.7),
+
+            blurRadius: 10,
+            //offset: Offset(0, 0), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: size.height * 0.25,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              image: const DecorationImage(
+                  image: AssetImage('assets/images/rating.jpg'),
+                  fit: BoxFit.cover),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.blueGrey.withOpacity(0.5),
+
+                  blurRadius: 10,
+                  //offset: Offset(0, 0), // changes position of shadow
+                ),
+              ],
+            ),
+            //child: Image(image: AssetImage('assets/images/vBreakdown.png')),
+          ),
+          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: [
+                Text(
+                  'Rate your previous job with mecName',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                RatingBar(
+                  ratingWidget: RatingWidget(
+                      full: Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      half: Icon(
+                        Icons.star,
+                        color: Colors.grey,
+                      ),
+                      empty: Icon(
+                        Icons.star,
+                        color: Colors.grey,
+                      )),
+                  updateOnDrag: true,
+                  onRatingUpdate: (rating) {
+                    //print(rating);
+                    ratingVal = rating.toInt();
+                  },
+                ),
+                Text('Rating: $ratingVal'),
+                SizedBox(height: 15),
+                TextFormField(
+                  controller: ratingController,
+                  minLines: 4,
+                  maxLines: 4,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration(
+                    hintText: 'Give your feedback...',
+                    hintStyle: TextStyle(color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _jobs.doc(docId).update({
+                          "jobRequestStatus": "completed/paid/skippedRating",
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.blue,
+                          side: BorderSide(width: 3, color: Colors.blue),
+                          elevation: 15),
+                      child: Text('Skip'),
+                    ),
+                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () async {
+                        //print(ratingController.text);
+                        try {
+                          await _jobs.doc(docId).update({
+                            "jobRequestStatus": "completed/paid/rated",
+                            "rating": ratingVal,
+                            "feedback": ratingController.text
+                          });
+                          setRating();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Successfully Rated'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Error: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
+                          backgroundColor: Colors.blue,
+                          foregroundColor: Colors.white,
+                          side: BorderSide(width: 3, color: Colors.blue),
+                          elevation: 15),
+                      child: Text('Submit'),
+                    ),
+                  ],
+                )
               ],
             ),
           ),

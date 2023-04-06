@@ -17,6 +17,7 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
 String? mecEmail;
 String? driverEmail;
+String? userName;
 
 class _MechanicHomeState extends State<MechanicHome> {
   late TextEditingController feeController;
@@ -24,6 +25,8 @@ class _MechanicHomeState extends State<MechanicHome> {
   String docId = "";
   final CollectionReference _jobs =
       FirebaseFirestore.instance.collection('Jobs');
+  final CollectionReference _mechanics =
+      FirebaseFirestore.instance.collection('Mechanics');
 
   Future getStatus() async {
     QuerySnapshot requestsQuery = await _jobs
@@ -51,6 +54,18 @@ class _MechanicHomeState extends State<MechanicHome> {
         status = "";
       }
     }
+
+    //--------------------get user's name--------------------------
+
+    QuerySnapshot mechanicQuery =
+        await _mechanics.where("email", isEqualTo: userEmail).get();
+
+    if (mechanicQuery.docs.isNotEmpty) {
+      userName = await mechanicQuery.docs.first['fname'];
+    }
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -60,88 +75,90 @@ class _MechanicHomeState extends State<MechanicHome> {
     super.initState();
   }
 
-  // @override
-  // void dispose() {
-  //   feeController.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    feeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(),
       bottomNavigationBar: BottomNavMechanicWidget(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: size.width * 0.5),
-                  child: Text(
-                    'Hello... Welcome back Sandun',
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Gabriela-Regular',
+      body: userName == null
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: size.width * 0.5),
+                        child: Text(
+                          'Hello... Welcome back $userName',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Gabriela-Regular',
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    SizedBox(height: size.height * 0.01),
+                    StreamBuilder(
+                      stream: _jobs
+                          .where("mechanicEmail", isEqualTo: userEmail)
+                          .where("jobRequestStatus", whereIn: [
+                        "requested",
+                        "accepted",
+                        "completed"
+                      ]).snapshots(),
+                      builder: (BuildContext context, snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data!.docs.length > 0) {
+                            if (snapshot.data!.docs[0]['jobRequestStatus'] ==
+                                'requested') {
+                              getStatus();
+                              return jobRequestWidget(context);
+                            } else if (snapshot.data!.docs[0]
+                                    ['jobRequestStatus'] ==
+                                'accepted') {
+                              getStatus();
+                              return currentJobWidget(context);
+                            } else {
+                              getStatus();
+                              return emptyJobWidget(context);
+                            }
+                          } else {
+                            getStatus();
+                            return emptyJobWidget(context);
+                          }
+                        }
+                        // if (status == 'requested') {
+                        //   return jobRequestWidget(context);
+                        // } else if (status == 'accepted') {
+                        //   return currentJobWidget(context);
+                        // } else {
+                        //   return emptyJobWidget(context);
+                        // }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
+
+                    // jobRequestWidget(context),
+                    // SizedBox(height: size.height * 0.01),
+                    //currentJobWidget(context),
+                  ],
                 ),
               ),
-              SizedBox(height: size.height * 0.01),
-              StreamBuilder(
-                stream: _jobs
-                    .where("mechanicEmail", isEqualTo: userEmail)
-                    .where("jobRequestStatus", whereIn: [
-                  "requested",
-                  "accepted",
-                  "completed"
-                ]).snapshots(),
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data!.docs.length > 0) {
-                      if (snapshot.data!.docs[0]['jobRequestStatus'] ==
-                          'requested') {
-                        getStatus();
-                        return jobRequestWidget(context);
-                      } else if (snapshot.data!.docs[0]['jobRequestStatus'] ==
-                          'accepted') {
-                        getStatus();
-                        return currentJobWidget(context);
-                      } else {
-                        getStatus();
-                        return emptyJobWidget(context);
-                      }
-                    } else {
-                      getStatus();
-                      return emptyJobWidget(context);
-                    }
-                  }
-                  // if (status == 'requested') {
-                  //   return jobRequestWidget(context);
-                  // } else if (status == 'accepted') {
-                  //   return currentJobWidget(context);
-                  // } else {
-                  //   return emptyJobWidget(context);
-                  // }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              ),
-
-              // jobRequestWidget(context),
-              // SizedBox(height: size.height * 0.01),
-              //currentJobWidget(context),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 

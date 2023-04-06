@@ -73,15 +73,18 @@ class _NearestMechanicsState extends State<NearestMechanics> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  'Available mechanics near you',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Gabriela-Regular",
+                child: Center(
+                  child: Text(
+                    'Available mechanics near you',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Gabriela-Regular",
+                    ),
                   ),
                 ),
               ),
+              SizedBox(height: 15),
               StreamBuilder(
                 stream: _mechanics
                     .orderBy('distance', descending: false)
@@ -112,7 +115,7 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                               ),
                             ),
                             subtitle: Text(
-                              "Ratings:  \nDistance: ${documentSnapshot['distance']} KM",
+                              "Ratings: ${documentSnapshot['rating']} \nDistance: ${documentSnapshot['distance']} KM",
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -149,6 +152,9 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                                     'latitude': currentLocation!.latitude,
                                     'longitude': currentLocation!.longitude,
                                     'distance': dis,
+                                    'rating': null,
+                                    'feedback': null,
+                                    'fee': null
                                   };
                                   await _jobs.doc().set(json);
                                 }

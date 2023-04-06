@@ -14,9 +14,50 @@ class messages extends StatefulWidget {
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
 
+final CollectionReference _messages =
+    FirebaseFirestore.instance.collection('Messages');
+final CollectionReference _drivers =
+    FirebaseFirestore.instance.collection('Drivers');
+final CollectionReference _mechanics =
+    FirebaseFirestore.instance.collection('Mechanics');
+String name = "Kevin";
+
 class _messagesState extends State<messages> {
   String id;
   _messagesState({required this.id});
+
+  void getName() async {
+    String tempEmail;
+    QuerySnapshot messageQuery = await _messages
+        .where("id", isEqualTo: id)
+        .where("email", isNotEqualTo: "$userEmail")
+        .get();
+
+    if (messageQuery.docs.isNotEmpty) {
+      tempEmail = messageQuery.docs.first['email'];
+
+      QuerySnapshot driverQuery =
+          await _drivers.where("email", isEqualTo: tempEmail).get();
+      if (driverQuery.docs.isNotEmpty) {
+        name = driverQuery.docs.first['fname'];
+      }
+
+      QuerySnapshot mechanicQuery =
+          await _mechanics.where("email", isEqualTo: tempEmail).get();
+      if (mechanicQuery.docs.isNotEmpty) {
+        name = mechanicQuery.docs.first['fname'];
+      }
+    }
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getName();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +72,8 @@ class _messagesState extends State<messages> {
           print(snapshot.error);
           return Text("something is wrong ${snapshot.error}");
         }
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.waiting ||
+            name == 'Kevin') {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -64,8 +106,7 @@ class _messagesState extends State<messages> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       title: Text(
-                        //qs['email']
-                        "You",
+                        qs['email'] == userEmail ? "You" : name,
                         style: TextStyle(
                           fontSize: 15,
                         ),
