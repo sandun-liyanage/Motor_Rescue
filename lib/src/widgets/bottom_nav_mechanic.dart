@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +14,32 @@ class BottomNavMechanicWidget extends StatefulWidget {
       _BottomNavMechanicWidgetState();
 }
 
+final FirebaseAuth auth = FirebaseAuth.instance;
+final String? userEmail = auth.currentUser!.email;
+
+final CollectionReference _drivers =
+    FirebaseFirestore.instance.collection('Mechanics');
+
+String? userName;
+
 class _BottomNavMechanicWidgetState extends State<BottomNavMechanicWidget> {
+  //--------------------get user's name--------------------------
+
+  Future getChat(BuildContext context) async {
+    QuerySnapshot driverQuery =
+        await _drivers.where("email", isEqualTo: userEmail).get();
+
+    if (driverQuery.docs.isNotEmpty) {
+      userName = await driverQuery.docs.first['fname'];
+    }
+
+    if (userName != null) {
+      GoRouter.of(context).go('/mechanic/chatWithAdmin/$userName-admin');
+    } else {
+      getChat(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -39,7 +65,7 @@ class _BottomNavMechanicWidgetState extends State<BottomNavMechanicWidget> {
                   GoRouter.of(context).go('/mechanic');
                   break;
                 case 1:
-                  GoRouter.of(context).go('/driver');
+                  getChat(context);
                   break;
                 case 2:
                   GoRouter.of(context).go('/mechanic/directions');

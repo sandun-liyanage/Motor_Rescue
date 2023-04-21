@@ -11,6 +11,7 @@ import 'package:motor_rescue/src/driver_dashboard/live_location.dart';
 import 'package:motor_rescue/src/driver_dashboard/nearest_mechanics.dart';
 import 'package:motor_rescue/src/landing.dart';
 import 'package:motor_rescue/src/live_chat/chat_page.dart';
+import 'package:motor_rescue/src/live_chat_admin/chat_page.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/directions.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/mechanic_home.dart';
 
@@ -63,6 +64,13 @@ final router = GoRouter(
                 return chatpage(id: id!);
               },
             ),
+            GoRoute(
+              path: 'chatWithAdmin/:id',
+              builder: (context, state) {
+                final id = state.params['id'];
+                return chatpage1(id: id!);
+              },
+            ),
           ],
         ),
         GoRoute(
@@ -78,6 +86,13 @@ final router = GoRouter(
               builder: (context, state) {
                 final id = state.params['id'];
                 return chatpage(id: id!);
+              },
+            ),
+            GoRoute(
+              path: 'chatWithAdmin/:id',
+              builder: (context, state) {
+                final id = state.params['id'];
+                return chatpage1(id: id!);
               },
             ),
           ],

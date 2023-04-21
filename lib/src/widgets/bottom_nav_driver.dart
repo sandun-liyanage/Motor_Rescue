@@ -1,13 +1,35 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, override_on_non_overriding_member, use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+final FirebaseAuth auth = FirebaseAuth.instance;
+final String? userEmail = auth.currentUser!.email;
+
+String? userName;
+
 class BottomNavDriverWidget extends StatelessWidget {
-  const BottomNavDriverWidget({
+  BottomNavDriverWidget({
     super.key,
   });
+
+  //--------------------get user's name--------------------------
+  final CollectionReference _drivers =
+      FirebaseFirestore.instance.collection('Drivers');
+
+  Future getChat(BuildContext context) async {
+    QuerySnapshot driverQuery =
+        await _drivers.where("email", isEqualTo: userEmail).get();
+
+    if (driverQuery.docs.isNotEmpty) {
+      userName = await driverQuery.docs.first['fname'];
+    }
+
+    GoRouter.of(context).go('/driver/chatWithAdmin/$userName-admin');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +56,7 @@ class BottomNavDriverWidget extends StatelessWidget {
                   GoRouter.of(context).go('/driver');
                   break;
                 case 1:
-                  GoRouter.of(context).go('/driver/nearestMechanics');
+                  getChat(context);
                   break;
                 case 2:
                   GoRouter.of(context).go('/driverLogin');

@@ -63,6 +63,9 @@ class _MechanicHomeState extends State<MechanicHome> {
     if (mechanicQuery.docs.isNotEmpty) {
       userName = await mechanicQuery.docs.first['fname'];
     }
+    if (userName == null) {
+      getStatus();
+    }
     if (mounted) {
       setState(() {});
     }
@@ -70,8 +73,8 @@ class _MechanicHomeState extends State<MechanicHome> {
 
   @override
   void initState() {
-    getStatus();
     feeController = TextEditingController();
+    getStatus();
     super.initState();
   }
 

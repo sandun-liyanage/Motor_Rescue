@@ -5,19 +5,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'message.dart';
 
-class chatpage extends StatefulWidget {
+class chatpage1 extends StatefulWidget {
   String id;
-  chatpage({required this.id});
+  chatpage1({required this.id});
   @override
-  _chatpageState createState() => _chatpageState(id: id);
+  _chatpage1State createState() => _chatpage1State(id: id);
 }
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
 
-class _chatpageState extends State<chatpage> {
+class _chatpage1State extends State<chatpage1> {
   String id;
-  _chatpageState({required this.id});
+  _chatpage1State({required this.id});
 
   final fs = FirebaseFirestore.instance;
   final TextEditingController message = TextEditingController();
@@ -27,7 +27,7 @@ class _chatpageState extends State<chatpage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Live Chat",
+          "Chat With Admin",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Color.fromARGB(255, 177, 202, 221),
@@ -79,10 +79,10 @@ class _chatpageState extends State<chatpage> {
                 IconButton(
                   onPressed: () {
                     if (message.text.isNotEmpty) {
-                      fs.collection('Messages').doc().set({
-                        'message': message.text.trim(),
-                        'time': DateTime.now(),
-                        'email': userEmail,
+                      fs.collection('messages-admin').doc().set({
+                        'text': message.text.trim(),
+                        'createdAt': DateTime.now(),
+                        'user': userEmail,
                         'id': id,
                       });
 
