@@ -15,13 +15,31 @@ class DriverLogin extends StatefulWidget {
 class _DriverLoginState extends State<DriverLogin> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  bool isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isButtonEnabled = false;
+    emailController.addListener(_validateForm);
+    passwordController.addListener(_validateForm);
+  }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     emailController.dispose();
     passwordController.dispose();
+    emailController.removeListener(_validateForm);
+    passwordController.removeListener(_validateForm);
     super.dispose();
+  }
+
+  void _validateForm() {
+    setState(() {
+      isButtonEnabled =
+          emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
+    });
   }
 
   @override
@@ -58,7 +76,8 @@ class _DriverLoginState extends State<DriverLogin> {
                 width: double.infinity,
                 height: 75,
                 child: ElevatedButton(
-                  onPressed: () => _logInDriver(context),
+                  onPressed:
+                      isButtonEnabled ? () => _logInDriver(context) : null,
                   child: const Text(
                     'LOGIN',
                     style: TextStyle(
