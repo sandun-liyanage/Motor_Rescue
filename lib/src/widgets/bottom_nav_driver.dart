@@ -59,7 +59,7 @@ class BottomNavDriverWidget extends StatelessWidget {
                   getChat(context);
                   break;
                 case 2:
-                  GoRouter.of(context).go('/driverLogin');
+                  GoRouter.of(context).go('/driver/driverProfile');
                   break;
                 case 3:
                   //logout function

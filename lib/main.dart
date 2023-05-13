@@ -7,6 +7,7 @@ import 'package:motor_rescue/src/auth/driver_signup.dart';
 import 'package:motor_rescue/src/auth/mechanic_login.dart';
 import 'package:motor_rescue/src/auth/mechanic_signup.dart';
 import 'package:motor_rescue/src/driver_dashboard/driver_home.dart';
+import 'package:motor_rescue/src/driver_dashboard/driver_profile.dart';
 import 'package:motor_rescue/src/driver_dashboard/live_location.dart';
 import 'package:motor_rescue/src/driver_dashboard/nearest_mechanics.dart';
 import 'package:motor_rescue/src/landing.dart';
@@ -70,6 +71,10 @@ final router = GoRouter(
                 final id = state.params['id'];
                 return chatpage1(id: id!);
               },
+            ),
+            GoRoute(
+              path: 'driverProfile',
+              builder: (context, state) => const DriverProfile(),
             ),
           ],
         ),
