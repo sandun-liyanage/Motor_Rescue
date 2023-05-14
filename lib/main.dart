@@ -16,6 +16,7 @@ import 'package:motor_rescue/src/live_chat/chat_page.dart';
 import 'package:motor_rescue/src/live_chat_admin/chat_page.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/directions.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/edit_mechanic_profile.dart';
+import 'package:motor_rescue/src/mechanic_dashboard/job_hostory_mec.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/mechanic_home.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/mechanic_profile.dart';
 
@@ -118,6 +119,10 @@ final router = GoRouter(
                   builder: (context, state) => const EditMechanicProfile(),
                 ),
               ],
+            ),
+            GoRoute(
+              path: 'jobHistoryMechanic',
+              builder: (context, state) => const JobHistoryMechanic(),
             ),
           ],
         )

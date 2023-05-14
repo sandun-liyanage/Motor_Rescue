@@ -105,11 +105,12 @@ class _MechanicHomeState extends State<MechanicHome> {
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Gabriela-Regular',
+                            color: Color.fromARGB(255, 3, 48, 85),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: size.height * 0.01),
+                    SizedBox(height: size.height * 0.015),
                     StreamBuilder(
                       stream: _jobs
                           .where("mechanicEmail", isEqualTo: userEmail)
@@ -151,14 +152,66 @@ class _MechanicHomeState extends State<MechanicHome> {
                         );
                       },
                     ),
-
-                    // jobRequestWidget(context),
-                    // SizedBox(height: size.height * 0.01),
-                    //currentJobWidget(context),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    previousJobsWidget(context),
                   ],
                 ),
               ),
             ),
+    );
+  }
+
+  //------------------------------------------------------------
+
+  Widget previousJobsWidget(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () => GoRouter.of(context).go('/mechanic/jobHistoryMechanic'),
+      child: Container(
+        height: size.height * 0.2,
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blueGrey.withOpacity(0.7),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: size.height * 0.01),
+            Text(
+              'Job History',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Gabriela-Regular',
+              ),
+            ),
+            SizedBox(height: size.height * 0.01),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(20),
+                  ),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/previousJobs.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -505,7 +558,7 @@ class _MechanicHomeState extends State<MechanicHome> {
   Widget emptyJobWidget(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.35,
+      height: size.height * 0.33,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -518,27 +571,45 @@ class _MechanicHomeState extends State<MechanicHome> {
       ),
       child: Column(
         children: [
-          SizedBox(height: size.height * 0.02),
-          Text(
-            'No jobs at the moment   :(',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Gabriela-Regular',
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20),
+                bottom: Radius.circular(0),
+              ),
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: size.height * 0.01),
+                Text(
+                  'No jobs at the moment   :(',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Gabriela-Regular',
+                  ),
+                ),
+                SizedBox(height: size.height * 0.01),
+              ],
             ),
           ),
           Container(
             height: size.height * 0.2,
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(0),
+                bottom: Radius.circular(20),
+              ),
               image: const DecorationImage(
                   image: AssetImage('assets/images/jobRequest.jpg'),
                   fit: BoxFit.cover),
             ),
             //child: Image(image: AssetImage('assets/images/vBreakdown.png')),
           ),
-          SizedBox(height: size.height * 0.03),
+          SizedBox(height: size.height * 0.01),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: size.width * 0.04),
             child: Row(
