@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, use_build_context_synchronously, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,6 +40,17 @@ class _BottomNavMechanicWidgetState extends State<BottomNavMechanicWidget> {
     }
   }
 
+  //-------------------- signout ------------------------
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -68,19 +79,14 @@ class _BottomNavMechanicWidgetState extends State<BottomNavMechanicWidget> {
                   getChat(context);
                   break;
                 case 2:
-                  GoRouter.of(context).go('/mechanic/directions');
+                  GoRouter.of(context).go('/mechanic/mechanicProfile');
                   break;
                 case 3:
-                  if (mounted) {
-                    GoRouter.of(context).go('/driver');
-                    //Navigator.of(context).pop();
-                    //context.pop();
-                  }
-                  FirebaseAuth.instance.signOut();
-
+                  _signOut(context);
+                  GoRouter.of(context).pop();
                   break;
                 default:
-                  GoRouter.of(context).go('/mechanic');
+                //GoRouter.of(context).go('/mechanic');
               }
             },
             tabs: [

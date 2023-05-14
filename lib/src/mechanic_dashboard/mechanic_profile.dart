@@ -5,13 +5,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../widgets/bottom_nav_driver.dart';
+import '../widgets/bottom_nav_mechanic.dart';
 
-class DriverProfile extends StatefulWidget {
-  const DriverProfile({super.key});
+class MechanicProfile extends StatefulWidget {
+  const MechanicProfile({super.key});
 
   @override
-  State<DriverProfile> createState() => _DriverProfileState();
+  State<MechanicProfile> createState() => _MechanicProfileState();
 }
 
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -21,20 +21,20 @@ String? userLname;
 String? userAddress;
 String? userPhone;
 
-class _DriverProfileState extends State<DriverProfile> {
-  final CollectionReference _drivers =
-      FirebaseFirestore.instance.collection('Drivers');
+class _MechanicProfileState extends State<MechanicProfile> {
+  final CollectionReference _mechanics =
+      FirebaseFirestore.instance.collection('Mechanics');
   Future getStatus() async {
     //--------------------get user's details--------------------------
 
-    QuerySnapshot driverQuery =
-        await _drivers.where("email", isEqualTo: userEmail).get();
+    QuerySnapshot mechanicQuery =
+        await _mechanics.where("email", isEqualTo: userEmail).get();
 
-    if (driverQuery.docs.isNotEmpty) {
-      userFname = await driverQuery.docs.first['fname'];
-      userLname = await driverQuery.docs.first['lname'];
-      userAddress = await driverQuery.docs.first['address'];
-      userPhone = await driverQuery.docs.first['phone'];
+    if (mechanicQuery.docs.isNotEmpty) {
+      userFname = await mechanicQuery.docs.first['fname'];
+      userLname = await mechanicQuery.docs.first['lname'];
+      userAddress = await mechanicQuery.docs.first['address'];
+      userPhone = await mechanicQuery.docs.first['phone'];
     }
     if (mounted) {
       setState(() {});
@@ -60,7 +60,7 @@ class _DriverProfileState extends State<DriverProfile> {
         toolbarHeight: 75,
         leadingWidth: 75,
       ),
-      bottomNavigationBar: BottomNavDriverWidget(),
+      bottomNavigationBar: BottomNavMechanicWidget(),
       body: userFname == null
           ? Center(child: CircularProgressIndicator())
           : Padding(
@@ -134,7 +134,7 @@ class _DriverProfileState extends State<DriverProfile> {
                   ElevatedButton(
                     onPressed: () {
                       GoRouter.of(context)
-                          .go('/driver/driverProfile/editDriverProfile');
+                          .go('/mechanic/mechanicProfile/editMechanicProfile');
                     },
                     child: const Text(
                       'Edit Profile',

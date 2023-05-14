@@ -8,13 +8,16 @@ import 'package:motor_rescue/src/auth/mechanic_login.dart';
 import 'package:motor_rescue/src/auth/mechanic_signup.dart';
 import 'package:motor_rescue/src/driver_dashboard/driver_home.dart';
 import 'package:motor_rescue/src/driver_dashboard/driver_profile.dart';
+import 'package:motor_rescue/src/driver_dashboard/edit_driver_profile.dart';
 import 'package:motor_rescue/src/driver_dashboard/live_location.dart';
 import 'package:motor_rescue/src/driver_dashboard/nearest_mechanics.dart';
 import 'package:motor_rescue/src/landing.dart';
 import 'package:motor_rescue/src/live_chat/chat_page.dart';
 import 'package:motor_rescue/src/live_chat_admin/chat_page.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/directions.dart';
+import 'package:motor_rescue/src/mechanic_dashboard/edit_mechanic_profile.dart';
 import 'package:motor_rescue/src/mechanic_dashboard/mechanic_home.dart';
+import 'package:motor_rescue/src/mechanic_dashboard/mechanic_profile.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,6 +78,12 @@ final router = GoRouter(
             GoRoute(
               path: 'driverProfile',
               builder: (context, state) => const DriverProfile(),
+              routes: [
+                GoRoute(
+                  path: 'editDriverProfile',
+                  builder: (context, state) => const EditDriverProfile(),
+                ),
+              ],
             ),
           ],
         ),
@@ -99,6 +108,16 @@ final router = GoRouter(
                 final id = state.params['id'];
                 return chatpage1(id: id!);
               },
+            ),
+            GoRoute(
+              path: 'mechanicProfile',
+              builder: (context, state) => const MechanicProfile(),
+              routes: [
+                GoRoute(
+                  path: 'editMechanicProfile',
+                  builder: (context, state) => const EditMechanicProfile(),
+                ),
+              ],
             ),
           ],
         )

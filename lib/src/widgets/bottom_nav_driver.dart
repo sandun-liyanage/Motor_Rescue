@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, override_on_non_overriding_member, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, override_on_non_overriding_member, use_build_context_synchronously, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,6 +29,17 @@ class BottomNavDriverWidget extends StatelessWidget {
     }
 
     GoRouter.of(context).go('/driver/chatWithAdmin/$userName-admin');
+  }
+
+  //-------------------- signout ------------------------
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _signOut(BuildContext context) async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   @override
@@ -62,8 +73,8 @@ class BottomNavDriverWidget extends StatelessWidget {
                   GoRouter.of(context).go('/driver/driverProfile');
                   break;
                 case 3:
-                  //logout function
-                  Navigator.of(context).pop();
+                  _signOut(context);
+                  GoRouter.of(context).pop();
                   break;
                 default:
                   GoRouter.of(context).go('/driver');
