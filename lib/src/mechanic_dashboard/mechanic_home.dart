@@ -156,10 +156,130 @@ class _MechanicHomeState extends State<MechanicHome> {
                       height: 25,
                     ),
                     previousJobsWidget(context),
+                    SizedBox(
+                      height: 25,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        chatAdminWidget(context),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        profileWidget(context),
+                      ],
+                    )
                   ],
                 ),
               ),
             ),
+    );
+  }
+
+  //---------------------------------------------------------------
+
+  Widget chatAdminWidget(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () =>
+          GoRouter.of(context).go('/mechanic/chatWithAdmin/$userName-admin'),
+      child: Container(
+        height: size.height * 0.15,
+        width: size.width * 0.4,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blueGrey.withOpacity(0.7),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: size.height * 0.0015),
+            Text(
+              'Chat Admin',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Gabriela-Regular',
+              ),
+            ),
+            SizedBox(height: size.height * 0.0015),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(20),
+                  ),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/chatAdmin.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  //-------------------------------------------------------------
+
+  Widget profileWidget(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () => GoRouter.of(context).go('/mechanic/mechanicProfile'),
+      child: Container(
+        height: size.height * 0.15,
+        width: size.width * 0.4,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blueGrey.withOpacity(0.7),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: size.height * 0.0015),
+            Text(
+              'Profile',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Gabriela-Regular',
+              ),
+            ),
+            SizedBox(height: size.height * 0.0015),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(20),
+                  ),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/profile1.png'),
+                    //fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 

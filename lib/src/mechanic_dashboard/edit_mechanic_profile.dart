@@ -112,7 +112,7 @@ class _EditMechanicProfileState extends State<EditMechanicProfile> {
                   const Text(
                     'Edit Profile',
                     style: TextStyle(
-                      fontSize: 45,
+                      fontSize: 40,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Gabriela-Regular',
                     ),
@@ -128,7 +128,7 @@ class _EditMechanicProfileState extends State<EditMechanicProfile> {
                   const Text(
                     'Change the details you want to update and submit',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

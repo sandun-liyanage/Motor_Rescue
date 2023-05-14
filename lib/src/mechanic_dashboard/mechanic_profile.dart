@@ -63,89 +63,91 @@ class _MechanicProfileState extends State<MechanicProfile> {
       bottomNavigationBar: BottomNavMechanicWidget(),
       body: userFname == null
           ? Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  CircleAvatar(
-                    radius: 140,
-                    backgroundImage: AssetImage('assets/images/profile.jpg'),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    '$userFname $userLname',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    CircleAvatar(
+                      radius: 118,
+                      backgroundImage: AssetImage('assets/images/profile.jpg'),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    '$userEmail',
-                    style: TextStyle(
-                      fontSize: 16,
+                    SizedBox(
+                      height: 20,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    height: 1,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.location_on),
-                    title: Text(
-                      'Address',
+                    Text(
+                      '$userFname $userLname',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
+                        fontSize: 24,
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    subtitle: Text('$userAddress'),
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    height: 1,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.phone),
-                    title: Text(
-                      'Phone',
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      '$userEmail',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.location_on),
+                      title: Text(
+                        'Address',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text('$userAddress'),
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.phone),
+                      title: Text(
+                        'Phone',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text('$userPhone'),
+                    ),
+                    Divider(
+                      color: Colors.grey,
+                      height: 1,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        GoRouter.of(context).go(
+                            '/mechanic/mechanicProfile/editMechanicProfile');
+                      },
+                      child: const Text(
+                        'Edit Profile',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    subtitle: Text('$userPhone'),
-                  ),
-                  Divider(
-                    color: Colors.grey,
-                    height: 1,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      GoRouter.of(context)
-                          .go('/mechanic/mechanicProfile/editMechanicProfile');
-                    },
-                    child: const Text(
-                      'Edit Profile',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
     );
