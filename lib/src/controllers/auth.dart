@@ -26,7 +26,6 @@ class AuthMethods {
           fname: fname!,
           lname: lname!,
           email: email,
-          password: password,
           address: address,
           phone: phone!,
         );
@@ -81,7 +80,6 @@ class AuthMethods {
           fname: fname!,
           lname: lname!,
           email: email,
-          password: password,
           address: address,
           phone: phone!,
           lat: lat!,

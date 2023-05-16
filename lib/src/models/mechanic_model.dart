@@ -4,7 +4,6 @@ class MechanicModel {
   final String fname;
   final String lname;
   final String email;
-  final String password;
   final String? address;
   final String phone;
   final double lat;
@@ -14,7 +13,6 @@ class MechanicModel {
       {required this.fname,
       required this.lname,
       required this.email,
-      required this.password,
       required this.address,
       required this.phone,
       required this.lat,
@@ -24,7 +22,6 @@ class MechanicModel {
         "fname": fname,
         "lname": lname,
         "email": email,
-        "password": password,
         "address": address,
         "phone": phone,
         "lat": lat,
@@ -47,7 +44,6 @@ class MechanicModel {
         fname: json['fname'],
         lname: json['lname'],
         email: json['email'],
-        password: json['password'],
         address: json['address'],
         phone: json['phone'],
         lat: json['lat'],

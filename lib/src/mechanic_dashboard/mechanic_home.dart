@@ -21,6 +21,7 @@ String? userName;
 
 class _MechanicHomeState extends State<MechanicHome> {
   late TextEditingController feeController;
+  late TextEditingController descriptionController;
   String? status;
   String docId = "";
   final CollectionReference _jobs =
@@ -71,6 +72,7 @@ class _MechanicHomeState extends State<MechanicHome> {
   @override
   void initState() {
     feeController = TextEditingController();
+    descriptionController = TextEditingController();
     getStatus();
     super.initState();
   }
@@ -78,6 +80,7 @@ class _MechanicHomeState extends State<MechanicHome> {
   @override
   void dispose() {
     feeController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
@@ -620,13 +623,43 @@ class _MechanicHomeState extends State<MechanicHome> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                _jobs
-                                    .doc(docId)
-                                    .update({"fee": feeController.text});
-                                _jobs.doc(docId).update({
-                                  "jobRequestStatus": "completed",
-                                });
                                 Navigator.of(context).pop();
+                                try {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text('Enter Job Description'),
+                                      content: TextField(
+                                        autofocus: true,
+                                        decoration: InputDecoration(
+                                            hintText:
+                                                'Enter short job description here.'),
+                                        controller: descriptionController,
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            _jobs.doc(docId).update(
+                                                {"fee": feeController.text});
+                                            _jobs.doc(docId).update({
+                                              "description":
+                                                  descriptionController.text
+                                            });
+                                            _jobs.doc(docId).update({
+                                              "jobRequestStatus": "completed",
+                                            });
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Submit'),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                  //setState(() {});
+                                  //getStatus();
+                                } catch (e) {
+                                  print(e.toString());
+                                }
                               },
                               child: Text('Submit'),
                             )

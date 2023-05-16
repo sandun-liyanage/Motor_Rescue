@@ -6,17 +6,17 @@ import 'package:flutter/material.dart';
 
 import '../widgets/bottom_nav_mechanic.dart';
 
-class JobHistoryMechanic extends StatefulWidget {
-  const JobHistoryMechanic({super.key});
+class JobHistoryDriver extends StatefulWidget {
+  const JobHistoryDriver({super.key});
 
   @override
-  State<JobHistoryMechanic> createState() => _JobHistoryMechanicState();
+  State<JobHistoryDriver> createState() => _JobHistoryDriverState();
 }
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
 
-class _JobHistoryMechanicState extends State<JobHistoryMechanic> {
+class _JobHistoryDriverState extends State<JobHistoryDriver> {
   CollectionReference jobs = FirebaseFirestore.instance.collection('Jobs');
 
   @override
@@ -32,7 +32,7 @@ class _JobHistoryMechanicState extends State<JobHistoryMechanic> {
       ),
       bottomNavigationBar: BottomNavMechanicWidget(),
       body: StreamBuilder<QuerySnapshot>(
-        stream: jobs.where('mechanicEmail', isEqualTo: userEmail).snapshots(),
+        stream: jobs.where('driverEmail', isEqualTo: userEmail).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {
             return Text('Something went wrong');
@@ -51,7 +51,7 @@ class _JobHistoryMechanicState extends State<JobHistoryMechanic> {
                 padding: const EdgeInsets.all(15),
                 child: Container(
                   padding: EdgeInsets.all(20.0),
-                  height: size.height * 0.2,
+                  height: size.height * 0.25,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),

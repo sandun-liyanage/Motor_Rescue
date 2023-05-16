@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -45,6 +45,7 @@ class _DriverLoginState extends State<DriverLogin> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -202,12 +203,22 @@ class _DriverLoginState extends State<DriverLogin> {
 
 //-------------------------------------------------
 
-  void _logInDriver(BuildContext context) async {
+  Future _logInDriver(BuildContext context) async {
     if (emailController.text.isEmpty) {
       print('email empty');
     } else if (passwordController.text.isEmpty) {
       //show error
     }
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+
     String result = await AuthMethods().logInDriver(
       email: emailController.text,
       password: passwordController.text,
@@ -219,5 +230,7 @@ class _DriverLoginState extends State<DriverLogin> {
       print(result);
       //showSnackBar(result, context);
     }
+
+    GoRouter.of(context).pop();
   }
 }

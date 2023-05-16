@@ -182,6 +182,16 @@ void _logInMechanic(BuildContext context) async {
   } else if (passwordController.text.isEmpty) {
     //show error
   }
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    },
+  );
+
   String result = await AuthMethods().logInDriver(
     email: emailController.text,
     password: passwordController.text,
@@ -193,4 +203,6 @@ void _logInMechanic(BuildContext context) async {
     print(result);
     //showSnackBar(result, context);
   }
+
+  GoRouter.of(context).pop();
 }

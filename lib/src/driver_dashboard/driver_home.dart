@@ -152,6 +152,7 @@ class _DriverHomeState extends State<DriverHome> {
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                             fontFamily: "Gabriela-Regular",
+                            color: Color.fromARGB(255, 3, 48, 85),
                           ),
                         ),
                       ),
@@ -203,23 +204,186 @@ class _DriverHomeState extends State<DriverHome> {
                         );
                       },
                     ),
-                    //jobRequestWidget(context),
-                    //currentJobWidget(context),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                    //   child: Text(
-                    //     'Tips',
-                    //     style: TextStyle(
-                    //       fontSize: 25,
-                    //       fontWeight: FontWeight.bold,
-                    //       fontFamily: "Gabriela-Regular",
-                    //     ),
-                    //   ),
-                    // ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    previousJobsWidget(context),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        chatAdminWidget(context),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        profileWidget(context),
+                      ],
+                    )
                   ],
                 ),
               ),
             ),
+    );
+  }
+
+  //---------------------------------------------------------------
+
+  Widget chatAdminWidget(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () =>
+          GoRouter.of(context).go('/driver/chatWithAdmin/$userName-admin'),
+      child: Container(
+        height: size.height * 0.15,
+        width: size.width * 0.4,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blueGrey.withOpacity(0.7),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: size.height * 0.0015),
+            Text(
+              'Chat Admin',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Gabriela-Regular',
+              ),
+            ),
+            SizedBox(height: size.height * 0.0015),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(20),
+                  ),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/chatAdmin.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  //-------------------------------------------------------------
+
+  Widget profileWidget(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () => GoRouter.of(context).go('/driver/driverProfile'),
+      child: Container(
+        height: size.height * 0.15,
+        width: size.width * 0.4,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blueGrey.withOpacity(0.7),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: size.height * 0.0015),
+            Text(
+              'Profile',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Gabriela-Regular',
+              ),
+            ),
+            SizedBox(height: size.height * 0.0015),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(20),
+                  ),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/profile1.png'),
+                    //fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  //------------------------------------------------------------
+
+  Widget previousJobsWidget(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () => GoRouter.of(context).go('/driver/jobHistoryDriver'),
+      child: Container(
+        height: size.height * 0.2,
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.blueGrey.withOpacity(0.7),
+              blurRadius: 10,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: size.height * 0.01),
+            Text(
+              'Job History',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Gabriela-Regular',
+              ),
+            ),
+            SizedBox(height: size.height * 0.01),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(0),
+                    bottom: Radius.circular(20),
+                  ),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/previousJobs.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -596,7 +760,7 @@ class _DriverHomeState extends State<DriverHome> {
       child: Column(
         children: [
           Container(
-            height: size.height * 0.25,
+            height: size.height * 0.20,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(30),
@@ -622,29 +786,55 @@ class _DriverHomeState extends State<DriverHome> {
                 Flexible(
                   child: Text(
                     'You have a payment due for your previouse job.',
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: 18),
                   ),
                 ),
                 SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    controller.makePayment(
-                        amount: fee.toString(),
-                        currency: 'LKR',
-                        context: context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      textStyle:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.blue,
-                      side: BorderSide(width: 3, color: Colors.blue),
-                      elevation: 15),
-                  child: Text('Make Payment'),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _jobs
+                            .doc(docId)
+                            .update({"jobRequestStatus": "completed/paid"});
+                      },
+                      style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.green,
+                          side: BorderSide(width: 3, color: Colors.green),
+                          elevation: 15),
+                      child: Text('Pay by Cash'),
+                    ),
+                    SizedBox(
+                      height: 1,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        controller.makePayment(
+                            amount: fee.toString(),
+                            currency: 'LKR',
+                            context: context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 10,
+                          ),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.blue,
+                          side: BorderSide(width: 3, color: Colors.blue),
+                          elevation: 15),
+                      child: Text('Pay by Card'),
+                    ),
+                  ],
                 ),
               ],
             ),

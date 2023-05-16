@@ -9,6 +9,7 @@ import 'package:motor_rescue/src/auth/mechanic_signup.dart';
 import 'package:motor_rescue/src/driver_dashboard/driver_home.dart';
 import 'package:motor_rescue/src/driver_dashboard/driver_profile.dart';
 import 'package:motor_rescue/src/driver_dashboard/edit_driver_profile.dart';
+import 'package:motor_rescue/src/driver_dashboard/job_history_driver.dart';
 import 'package:motor_rescue/src/driver_dashboard/live_location.dart';
 import 'package:motor_rescue/src/driver_dashboard/nearest_mechanics.dart';
 import 'package:motor_rescue/src/landing.dart';
@@ -85,6 +86,10 @@ final router = GoRouter(
                   builder: (context, state) => const EditDriverProfile(),
                 ),
               ],
+            ),
+            GoRoute(
+              path: 'jobHistoryDriver',
+              builder: (context, state) => const JobHistoryDriver(),
             ),
           ],
         ),

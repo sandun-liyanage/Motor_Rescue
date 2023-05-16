@@ -4,7 +4,6 @@ class DriverModel {
   final String fname;
   final String lname;
   final String email;
-  final String password;
   final String? address;
   final String phone;
 
@@ -12,7 +11,6 @@ class DriverModel {
       {required this.fname,
       required this.lname,
       required this.email,
-      required this.password,
       required this.address,
       required this.phone});
 
@@ -20,7 +18,6 @@ class DriverModel {
         "fname": fname,
         "lname": lname,
         "email": email,
-        "password": password,
         "address": address,
         "phone": phone,
       };
@@ -31,7 +28,6 @@ class DriverModel {
       fname: snapshot['fname'],
       lname: snapshot['lname'],
       email: snapshot['email'],
-      password: snapshot['password'],
       address: snapshot['address'],
       phone: snapshot['phone'],
     );
