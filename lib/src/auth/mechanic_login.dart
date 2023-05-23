@@ -12,10 +12,39 @@ class MechanicLogin extends StatefulWidget {
   State<MechanicLogin> createState() => _MechanicLoginState();
 }
 
-final emailController = TextEditingController();
-final passwordController = TextEditingController();
+late TextEditingController emailController;
+late TextEditingController passwordController;
 
 class _MechanicLoginState extends State<MechanicLogin> {
+  bool isButtonEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isButtonEnabled = false;
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    emailController.addListener(_validateForm);
+    passwordController.addListener(_validateForm);
+  }
+
+  // @override
+  // void dispose() {
+  //   // Clean up the controller when the widget is disposed.
+  //   //emailController.removeListener(_validateForm);
+  //   //passwordController.removeListener(_validateForm);
+  //   emailController.dispose();
+  //   passwordController.dispose();
+  //   super.dispose();
+  // }
+
+  void _validateForm() {
+    setState(() {
+      isButtonEnabled =
+          emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -50,7 +79,8 @@ class _MechanicLoginState extends State<MechanicLogin> {
                 width: double.infinity,
                 height: 75,
                 child: ElevatedButton(
-                  onPressed: () => _logInMechanic(context),
+                  onPressed:
+                      isButtonEnabled ? () => _logInMechanic(context) : null,
                   child: const Text(
                     'LOGIN',
                     style: TextStyle(
@@ -201,7 +231,12 @@ void _logInMechanic(BuildContext context) async {
     GoRouter.of(context).go('/mechanic');
   } else {
     print(result);
-    //showSnackBar(result, context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(result),
+        backgroundColor: Colors.green,
+      ),
+    );
   }
 
   GoRouter.of(context).pop();

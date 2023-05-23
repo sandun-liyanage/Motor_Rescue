@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,12 +13,12 @@ class MechanicSignup extends StatefulWidget {
   State<MechanicSignup> createState() => _MechanicSignupState();
 }
 
-final fnameController = TextEditingController();
-final lnameController = TextEditingController();
-final emailController = TextEditingController();
-final passwordController = TextEditingController();
-final addressController = TextEditingController();
-final phoneController = TextEditingController();
+late TextEditingController fnameController;
+late TextEditingController lnameController;
+late TextEditingController emailController;
+late TextEditingController passwordController;
+late TextEditingController addressController;
+late TextEditingController phoneController;
 
 LocationData? currentLocation;
 
@@ -33,10 +33,57 @@ class _MechanicSignupState extends State<MechanicSignup> {
     });
   }
 
+  //-------validate------------------------
+
+  bool isButtonEnabled = false;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    fnameController.removeListener(_validateForm);
+    lnameController.removeListener(_validateForm);
+    emailController.removeListener(_validateForm);
+    passwordController.removeListener(_validateForm);
+    addressController.removeListener(_validateForm);
+    phoneController.removeListener(_validateForm);
+    fnameController.dispose();
+    lnameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    addressController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
+  void _validateForm() {
+    setState(() {
+      isButtonEnabled = fnameController.text.isNotEmpty &&
+          lnameController.text.isNotEmpty &&
+          emailController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty &&
+          addressController.text.isNotEmpty &&
+          phoneController.text.isNotEmpty;
+    });
+  }
+
   @override
   void initState() {
-    getCurrentLocation();
     super.initState();
+    getCurrentLocation();
+    isButtonEnabled = false;
+    fnameController = TextEditingController();
+    lnameController = TextEditingController();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    addressController = TextEditingController();
+    phoneController = TextEditingController();
+
+    fnameController.addListener(_validateForm);
+    lnameController.addListener(_validateForm);
+    emailController.addListener(_validateForm);
+    passwordController.addListener(_validateForm);
+    addressController.addListener(_validateForm);
+    phoneController.addListener(_validateForm);
   }
 
   @override
@@ -88,9 +135,8 @@ class _MechanicSignupState extends State<MechanicSignup> {
                     width: double.infinity,
                     height: 75,
                     child: ElevatedButton(
-                      onPressed: () async {
-                        _signUp(context);
-                      },
+                      onPressed:
+                          isButtonEnabled ? () => _signUp(context) : null,
                       child: const Text(
                         'SIGNUP',
                         style: TextStyle(
@@ -378,6 +424,15 @@ Widget buildPhone() {
 //-----------------------------------------------------
 
 Future<void> _signUp(BuildContext context) async {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    },
+  );
+
   if (_formKey.currentState!.validate()) {
     _formKey.currentState!.save();
     String result = await AuthMethods().signUpMechanic(
@@ -393,9 +448,15 @@ Future<void> _signUp(BuildContext context) async {
     if (result == 'success') {
       GoRouter.of(context).go('/MechanicLogin');
     } else {
-      GoRouter.of(context).pop();
       print(result);
-      //Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result),
+          backgroundColor: Colors.green,
+        ),
+      );
     }
   }
+
+  GoRouter.of(context).pop();
 }

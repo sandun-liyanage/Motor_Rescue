@@ -51,7 +51,7 @@ class _JobHistoryDriverState extends State<JobHistoryDriver> {
                 padding: const EdgeInsets.all(15),
                 child: Container(
                   padding: EdgeInsets.all(20.0),
-                  height: size.height * 0.25,
+                  height: size.height * 0.3,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -93,6 +93,29 @@ class _JobHistoryDriverState extends State<JobHistoryDriver> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
+                            'Vehicle Number',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${data['vehicle']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
                             'Description:',
                             style: TextStyle(
                               fontSize: 16,
@@ -101,6 +124,52 @@ class _JobHistoryDriverState extends State<JobHistoryDriver> {
                           ),
                           Text(
                             '${data['description']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Date:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${data['date']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Time:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${data['time']}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.normal,

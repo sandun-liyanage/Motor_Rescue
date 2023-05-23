@@ -549,6 +549,12 @@ class _DriverHomeState extends State<DriverHome> {
                       });
                       getStatus();
                       setState(() {});
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Canceled Job Request.'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
                     } catch (e) {
                       print(e.toString());
                     }
@@ -700,6 +706,12 @@ class _DriverHomeState extends State<DriverHome> {
                       _jobs.doc(docId).update({
                         "jobRequestStatus": "canceled",
                       });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Canceled the job.'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
                       setState(() {});
                       //getStatus();
                     } catch (e) {

@@ -51,7 +51,7 @@ class _JobHistoryMechanicState extends State<JobHistoryMechanic> {
                 padding: const EdgeInsets.all(15),
                 child: Container(
                   padding: EdgeInsets.all(20.0),
-                  height: size.height * 0.2,
+                  height: size.height * 0.3,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -70,14 +70,37 @@ class _JobHistoryMechanicState extends State<JobHistoryMechanic> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Mechanic Email:',
+                            'Driver Email:',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
-                            '${data['mechanicEmail']}',
+                            '${data['driverEmail']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Vehicle Number',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${data['vehicle']}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.normal,
@@ -101,6 +124,52 @@ class _JobHistoryMechanicState extends State<JobHistoryMechanic> {
                           ),
                           Text(
                             '${data['description']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Date:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${data['date']}',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Time:',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${data['time']}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.normal,

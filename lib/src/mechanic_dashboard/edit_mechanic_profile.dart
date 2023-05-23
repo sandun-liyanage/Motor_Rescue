@@ -41,6 +41,15 @@ class _EditMechanicProfileState extends State<EditMechanicProfile> {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
       String tempId;
       if (mechanicQuery.docs.isNotEmpty) {
         tempId = mechanicQuery.docs.first.id;
@@ -56,6 +65,14 @@ class _EditMechanicProfileState extends State<EditMechanicProfile> {
           'phone': phoneController.text == "" ? userPhone : phoneController.text
         });
 
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Successfully updated details.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        GoRouter.of(context).pop();
         GoRouter.of(context).go('/mechanic');
         if (mounted) {
           setState(() {});

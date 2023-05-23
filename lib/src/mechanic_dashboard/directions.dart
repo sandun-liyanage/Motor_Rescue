@@ -22,6 +22,8 @@ final String? userEmail = auth.currentUser!.email;
 double? lat = 0;
 double? lng = 0;
 
+LatLng destination = LatLng(0, 0);
+
 class _DirectionsState extends State<Directions> {
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -39,10 +41,11 @@ class _DirectionsState extends State<Directions> {
     if (requestsQuery.docs.isNotEmpty) {
       lat = await requestsQuery.docs.first['latitude'].toDouble();
       lng = await requestsQuery.docs.first['longitude'].toDouble();
+      destination = await LatLng(lat!, lng!);
     }
   }
 
-  LatLng destination = LatLng(lat!, lng!);
+  //LatLng destination = LatLng(lat!, lng!);
 
   List<LatLng> polylineCordinates = [];
   LocationData? currentLocation;

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print, prefer_const_constructors
+// ignore_for_file: use_build_context_synchronously, avoid_print, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,14 +13,16 @@ class DriverLogin extends StatefulWidget {
 }
 
 class _DriverLoginState extends State<DriverLogin> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
   bool isButtonEnabled = false;
 
   @override
   void initState() {
     super.initState();
     isButtonEnabled = false;
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
     emailController.addListener(_validateForm);
     passwordController.addListener(_validateForm);
   }
@@ -228,7 +230,12 @@ class _DriverLoginState extends State<DriverLogin> {
       GoRouter.of(context).go('/driver');
     } else {
       print(result);
-      //showSnackBar(result, context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(result),
+          backgroundColor: Colors.green,
+        ),
+      );
     }
 
     GoRouter.of(context).pop();

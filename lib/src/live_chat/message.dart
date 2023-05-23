@@ -47,6 +47,10 @@ class _messagesState extends State<messages> {
       if (mechanicQuery.docs.isNotEmpty) {
         name = mechanicQuery.docs.first['fname'];
       }
+
+      if (mounted) {
+        setState(() {});
+      }
     }
     if (mounted) {
       setState(() {});
@@ -72,8 +76,7 @@ class _messagesState extends State<messages> {
           print(snapshot.error);
           return Text("something is wrong ${snapshot.error}");
         }
-        if (snapshot.connectionState == ConnectionState.waiting ||
-            name == 'Kevin') {
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
           );

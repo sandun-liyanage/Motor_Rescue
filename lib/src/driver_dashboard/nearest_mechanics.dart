@@ -27,6 +27,7 @@ class _NearestMechanicsState extends State<NearestMechanics> {
       FirebaseFirestore.instance.collection('Mechanics');
   final CollectionReference _jobs =
       FirebaseFirestore.instance.collection('Jobs');
+  DateTime currentDate = DateTime.now();
 
   void getCurrentLocation() async {
     Location location = Location();
@@ -152,6 +153,13 @@ class _NearestMechanicsState extends State<NearestMechanics> {
                                     'latitude': currentLocation!.latitude,
                                     'longitude': currentLocation!.longitude,
                                     'distance': dis,
+                                    'date': DateTime(currentDate.year,
+                                            currentDate.month, currentDate.day)
+                                        .toLocal()
+                                        .toString()
+                                        .split(' ')[0],
+                                    'time':
+                                        "${currentDate.hour} : ${currentDate.minute}",
                                     'rating': null,
                                     'feedback': null,
                                     'fee': null

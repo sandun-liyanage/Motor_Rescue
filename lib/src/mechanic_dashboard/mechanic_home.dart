@@ -22,6 +22,7 @@ String? userName;
 class _MechanicHomeState extends State<MechanicHome> {
   late TextEditingController feeController;
   late TextEditingController descriptionController;
+  late TextEditingController vehicleNumController;
   String? status;
   String docId = "";
   final CollectionReference _jobs =
@@ -73,6 +74,7 @@ class _MechanicHomeState extends State<MechanicHome> {
   void initState() {
     feeController = TextEditingController();
     descriptionController = TextEditingController();
+    vehicleNumController = TextEditingController();
     getStatus();
     super.initState();
   }
@@ -81,6 +83,7 @@ class _MechanicHomeState extends State<MechanicHome> {
   void dispose() {
     feeController.dispose();
     descriptionController.dispose();
+    vehicleNumController.dispose();
     super.dispose();
   }
 
@@ -421,6 +424,12 @@ class _MechanicHomeState extends State<MechanicHome> {
                       _jobs.doc(docId).update({
                         "jobRequestStatus": "accepted",
                       });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Job Request Accepted.'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
                       //setState(() {});
                       //getStatus();
                     } catch (e) {
@@ -460,6 +469,12 @@ class _MechanicHomeState extends State<MechanicHome> {
                       await _jobs.doc(docId).update({
                         "jobRequestStatus": "declined",
                       });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Job Request Declined.'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
                       // getStatus();
                       //setState(() {});
                     } catch (e) {
@@ -612,59 +627,56 @@ class _MechanicHomeState extends State<MechanicHome> {
                     try {
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Enter your fee (LKR)'),
-                          content: TextField(
-                            autofocus: true,
-                            decoration: InputDecoration(
-                                hintText: 'Enter your job fee here.'),
-                            controller: feeController,
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                try {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text('Enter Job Description'),
-                                      content: TextField(
-                                        autofocus: true,
-                                        decoration: InputDecoration(
-                                            hintText:
-                                                'Enter short job description here.'),
-                                        controller: descriptionController,
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            _jobs.doc(docId).update(
-                                                {"fee": feeController.text});
-                                            _jobs.doc(docId).update({
-                                              "description":
-                                                  descriptionController.text
-                                            });
-                                            _jobs.doc(docId).update({
-                                              "jobRequestStatus": "completed",
-                                            });
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text('Submit'),
-                                        )
-                                      ],
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Job Details'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextField(
+                                  controller: vehicleNumController,
+                                  decoration: InputDecoration(
+                                      labelText: 'Vehicle Number'),
+                                ),
+                                TextField(
+                                  controller: descriptionController,
+                                  decoration:
+                                      InputDecoration(labelText: 'Description'),
+                                ),
+                                TextField(
+                                  controller: feeController,
+                                  decoration: InputDecoration(labelText: 'Fee'),
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  _jobs
+                                      .doc(docId)
+                                      .update({"fee": feeController.text});
+                                  _jobs.doc(docId).update({
+                                    "description": descriptionController.text,
+                                  });
+                                  _jobs.doc(docId).update({
+                                    "vehicle": vehicleNumController.text,
+                                  });
+                                  _jobs.doc(docId).update({
+                                    "jobRequestStatus": "completed",
+                                  });
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Job Completed.'),
+                                      backgroundColor: Colors.green,
                                     ),
                                   );
-                                  //setState(() {});
-                                  //getStatus();
-                                } catch (e) {
-                                  print(e.toString());
-                                }
-                              },
-                              child: Text('Submit'),
-                            )
-                          ],
-                        ),
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Submit'),
+                              ),
+                            ],
+                          );
+                        },
                       );
                       //setState(() {});
                       //getStatus();
@@ -703,6 +715,88 @@ class _MechanicHomeState extends State<MechanicHome> {
           ),
         ],
       ),
+    );
+  }
+
+  //------------------input fields when completing the job------------------
+
+  Widget buildFee() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+              ),
+            ],
+          ),
+          height: 60,
+          child: TextField(
+            keyboardType: TextInputType.text,
+            controller: feeController,
+            style: const TextStyle(
+              color: Colors.black87,
+              fontSize: 20,
+            ),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              icon: Icon(
+                Icons.email,
+                color: Color(0xff5ac18e),
+                size: 30,
+              ),
+              hintText: 'Email',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildDescription() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+              ),
+            ],
+          ),
+          height: 60,
+          child: TextField(
+            keyboardType: TextInputType.emailAddress,
+            controller: descriptionController,
+            style: const TextStyle(
+              color: Colors.black87,
+              fontSize: 20,
+            ),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              icon: Icon(
+                Icons.email,
+                color: Color(0xff5ac18e),
+                size: 30,
+              ),
+              hintText: 'Email',
+            ),
+          ),
+        ),
+      ],
     );
   }
 

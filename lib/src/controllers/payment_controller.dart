@@ -38,7 +38,7 @@ class PaymentController extends GetxController {
       required String currency,
       required BuildContext context}) async {
     try {
-      getDetails();
+      await getDetails();
       paymentIntentData = await createPaymentIntent(amount, currency);
       if (paymentIntentData != null) {
         await Stripe.instance.initPaymentSheet(

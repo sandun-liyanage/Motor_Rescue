@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, camel_case_types, library_private_types_in_public_api, no_logic_in_create_state, must_be_immutable, body_might_complete_normally_nullable, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, camel_case_types, library_private_types_in_public_api, no_logic_in_create_state, must_be_immutable, body_might_complete_normally_nullable, use_key_in_widget_constructors, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,12 +15,41 @@ class chatpage1 extends StatefulWidget {
 final FirebaseAuth auth = FirebaseAuth.instance;
 final String? userEmail = auth.currentUser!.email;
 
+final CollectionReference _drivers =
+    FirebaseFirestore.instance.collection('Drivers');
+final CollectionReference _mechanics =
+    FirebaseFirestore.instance.collection('Mechanics');
+
 class _chatpage1State extends State<chatpage1> {
   String id;
   _chatpage1State({required this.id});
 
   final fs = FirebaseFirestore.instance;
   final TextEditingController message = TextEditingController();
+
+  var collectionName = '';
+  var docId = '';
+  void getName() async {
+    QuerySnapshot driverQuery =
+        await _drivers.where("email", isEqualTo: userEmail).get();
+    if (driverQuery.docs.isNotEmpty) {
+      collectionName = "Drivers";
+      docId = driverQuery.docs.first.id;
+    }
+
+    QuerySnapshot mechanicQuery =
+        await _mechanics.where("email", isEqualTo: userEmail).get();
+    if (mechanicQuery.docs.isNotEmpty) {
+      collectionName = "Mechanics";
+      docId = mechanicQuery.docs.first.id;
+    }
+  }
+
+  @override
+  void initState() {
+    getName();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +114,12 @@ class _chatpage1State extends State<chatpage1> {
                         'user': userEmail,
                         'id': id,
                       });
+
+                      fs.collection(collectionName).doc(docId).update({
+                        'read': 'false',
+                      });
+
+                      print(collectionName);
 
                       message.clear();
                     }
