@@ -1,6 +1,9 @@
 # motor_rescue
 This repository contains the code and documentation for a real-time integrated mobile and web application developed using Flutter, React, TypeScript, Firebase, Google Maps API, and Stripe API. The application is designed to assist drivers when an unexpected vehicle breakdown occurs, providing real-time location tracking, secure payment gateway, rating system, cross-platform live chat, testing automation, and security measures.
 
+![image](https://github.com/sandun-liyanage/Motor_Rescue/assets/60921135/8d304c66-5e6d-497e-a846-9960b7d50ead)
+
+
 Features
 Real-Time Location Tracking: The application utilizes the Google Maps API to track the real-time location of the user's vehicle when a breakdown occurs. This enables quick and efficient assistance from service providers.
 
